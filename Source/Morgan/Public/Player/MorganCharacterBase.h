@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "MorganCharacterBase.generated.h"
 
+class UMorganWeaponComponent;
 class USpringArmComponent;
 class UCameraComponent;
 struct FInputActionValue;
@@ -31,6 +32,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
+	TObjectPtr<UMorganWeaponComponent> WeaponComponent;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
@@ -38,7 +42,7 @@ protected:
 	TObjectPtr<UMorganInputDataConfig> InputDataConfig;
 
 private:
-
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Attack();
 };
