@@ -20,4 +20,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* Look;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Attack;
 };

@@ -4,6 +4,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/MorganWeaponComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/MorganInputDataConfig.h"
 
@@ -16,6 +17,8 @@ AMorganCharacterBase::AMorganCharacterBase()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	WeaponComponent = CreateDefaultSubobject<UMorganWeaponComponent>("WeaponComponent");
 }
 
 void AMorganCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -39,6 +42,7 @@ void AMorganCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	{
 		Input->BindAction(InputDataConfig->Move, ETriggerEvent::Triggered, this, &AMorganCharacterBase::Move);
 		Input->BindAction(InputDataConfig->Look, ETriggerEvent::Triggered, this, &AMorganCharacterBase::Look);
+		Input->BindAction(InputDataConfig->Attack, ETriggerEvent::Started, this, &AMorganCharacterBase::Attack);
 	}
 }
 
@@ -73,4 +77,9 @@ void AMorganCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerYawInput(-LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AMorganCharacterBase::Attack()
+{
+	WeaponComponent->Attack();
 }
