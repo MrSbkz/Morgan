@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "MorganCharacterBase.generated.h"
 
+class UMorganHealthComponent;
 class UMorganWeaponComponent;
 
 UCLASS()
@@ -15,9 +16,11 @@ class MORGAN_API AMorganCharacterBase : public ACharacter
 
 public:
 	AMorganCharacterBase();
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<UMorganWeaponComponent> WeaponComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
+	TObjectPtr<UMorganHealthComponent> HealthComponent;
 };
