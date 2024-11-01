@@ -2,10 +2,6 @@
 
 #include "Components/MorganHealthComponent.h"
 
-UMorganHealthComponent::UMorganHealthComponent()
-{
-}
-
 void UMorganHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();

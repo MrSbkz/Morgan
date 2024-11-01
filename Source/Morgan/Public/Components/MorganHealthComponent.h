@@ -11,9 +11,6 @@ class MORGAN_API UMorganHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
-	UMorganHealthComponent();
-
 protected:
 	virtual void BeginPlay() override;
 	
