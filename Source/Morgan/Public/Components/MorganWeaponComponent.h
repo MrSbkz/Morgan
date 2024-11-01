@@ -14,13 +14,10 @@ class MORGAN_API UMorganWeaponComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	void Attack();
+	void Attack() const;
 
 protected:
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-	TObjectPtr<UAnimMontage> AttackAnimation;
 
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	FName WeaponEquipSocketName = "WeaponPoint";
@@ -28,11 +25,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	TSubclassOf<AMorganWeaponBase> WeaponClass;
 
-private:
-	void InitAnimations();
-	void PlayAnimMontage(UAnimMontage* AnimMontage) const;	
-	void SpawnWeapon() const;	
-	void AttachWeaponToSocket(AMorganWeaponBase* Weapon, USceneComponent* SceneComponent) const;
+private:	
+	void SpawnWeapon();	
+	void AttachWeaponToSocket(USceneComponent* SceneComponent) const;
 
-	bool IsAttackAnimInProgress;
+	UPROPERTY()
+	AMorganWeaponBase* Weapon;
 };

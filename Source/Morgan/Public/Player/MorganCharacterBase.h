@@ -18,6 +18,8 @@ public:
 	AMorganCharacterBase();
 
 protected:
+	virtual void BeginPlay() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<UMorganWeaponComponent> WeaponComponent;
 
