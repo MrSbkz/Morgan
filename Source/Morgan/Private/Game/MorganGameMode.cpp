@@ -1,12 +1,11 @@
 // Copyrights P.K.
 
 #include "Game/MorganGameMode.h"
-
-#include "Player/MorganCharacterBase.h"
+#include "Player/MorganPlayerCharacter.h"
 #include "Player/MorganPlayerController.h"
 
 AMorganGameMode::AMorganGameMode()
 {
-	DefaultPawnClass = AMorganCharacterBase::StaticClass();
+	DefaultPawnClass = AMorganPlayerCharacter::StaticClass();
 	PlayerControllerClass = AMorganPlayerController::StaticClass();
 }
