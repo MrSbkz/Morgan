@@ -7,12 +7,6 @@
 #include "MorganCharacterBase.generated.h"
 
 class UMorganWeaponComponent;
-class USpringArmComponent;
-class UCameraComponent;
-struct FInputActionValue;
-class UMorganInputDataConfig;
-class UInputMappingContext;
-class UInputAction;
 
 UCLASS()
 class MORGAN_API AMorganCharacterBase : public ACharacter
@@ -24,25 +18,6 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
-	virtual void BeginPlay() override;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
-	TObjectPtr<UCameraComponent> CameraComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
-	TObjectPtr<USpringArmComponent> SpringArmComponent;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<UMorganWeaponComponent> WeaponComponent;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> DefaultMappingContext;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UMorganInputDataConfig> InputDataConfig;
-
-private:
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Attack();
 };
