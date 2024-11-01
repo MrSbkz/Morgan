@@ -21,6 +21,7 @@ void AMorganCharacterBase::BeginPlay()
 
 	HealthComponent->OnDeath.AddLambda([this]
 	{
+		SetLifeSpan(5.0f);
 		GetCharacterMovement()->DisableMovement();
 		GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 		GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
