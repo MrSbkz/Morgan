@@ -28,9 +28,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Weapon", meta=(ClampMin="0.0"))
 	float DamageAmount;
 
+	bool IsAttackAnimInProgress;
+
 private:
 	void InitAnimations();
 	void PlayAnimMontage(UAnimMontage* AnimMontage) const;
-
-	bool IsAttackAnimInProgress;
 };

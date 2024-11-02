@@ -7,9 +7,9 @@
 
 void AMorganPistolWeapon::Attack()
 {
-	Super::Attack();
-
+	if(IsAttackAnimInProgress) return;
 	MakeShot();
+	Super::Attack();
 }
 
 void AMorganPistolWeapon::MakeShot() const
