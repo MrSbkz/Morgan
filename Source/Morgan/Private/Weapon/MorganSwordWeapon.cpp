@@ -30,24 +30,28 @@ void AMorganSwordWeapon::InitAnimations()
 	if (UMorganSwordAttackEnableAnimNotify* SwordAttackEnableAnimNotify =
 		AnimUtils::FindAnimNotifyByClass<UMorganSwordAttackEnableAnimNotify>(AttackAnimation))
 	{
-		SwordAttackEnableAnimNotify->OnNotify.AddLambda([this](const USkeletalMeshComponent* MeshComp)
-		{
-			const ACharacter* Character = Cast<ACharacter>(GetOwner());
-			if (!Character || Character->GetMesh() != MeshComp) return;
-
-			SwordCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
-		});
+		SwordAttackEnableAnimNotify->OnNotify.AddUObject(this, &AMorganSwordWeapon::OnSwordCollisionEnabled);
 	}
 
 	if (UMorganSwordAttackDisableAnimNotify* SwordAttackDisableAnimNotify =
 		AnimUtils::FindAnimNotifyByClass<UMorganSwordAttackDisableAnimNotify>(AttackAnimation))
 	{
-		SwordAttackDisableAnimNotify->OnNotify.AddLambda([this](const USkeletalMeshComponent* MeshComp)
-		{
-			const ACharacter* Character = Cast<ACharacter>(GetOwner());
-			if (!Character || Character->GetMesh() != MeshComp) return;
-
-			SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
-		});
+		SwordAttackDisableAnimNotify->OnNotify.AddUObject(this, &AMorganSwordWeapon::OnSwordCollisionDisabled);
 	}
+}
+
+void AMorganSwordWeapon::OnSwordCollisionEnabled(USkeletalMeshComponent* MeshComp)
+{
+	const ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (!Character || Character->GetMesh() != MeshComp) return;
+
+	SwordCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+}
+
+void AMorganSwordWeapon::OnSwordCollisionDisabled(USkeletalMeshComponent* MeshComp)
+{
+	const ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (!Character || Character->GetMesh() != MeshComp) return;
+
+	SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
 }

@@ -22,4 +22,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	TObjectPtr<UCapsuleComponent> SwordCollision;
+
+private:
+	void OnSwordCollisionEnabled(USkeletalMeshComponent* MeshComp);
+	void OnSwordCollisionDisabled(USkeletalMeshComponent* MeshComp);
 };
