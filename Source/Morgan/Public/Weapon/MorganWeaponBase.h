@@ -18,6 +18,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	AController* GetController() const;
+	virtual void InitAnimations();
 
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	TObjectPtr<UStaticMeshComponent> Mesh;
@@ -31,6 +32,5 @@ protected:
 	bool IsAttackAnimInProgress;
 
 private:
-	void InitAnimations();
 	void PlayAnimMontage(UAnimMontage* AnimMontage) const;
 };

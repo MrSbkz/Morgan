@@ -25,8 +25,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	TSubclassOf<AMorganWeaponBase> WeaponClass;
 
-private:	
-	void SpawnWeapon();	
+private:
+	void SpawnWeapon();
 	void AttachWeaponToSocket(USceneComponent* SceneComponent) const;
 
 	UPROPERTY()

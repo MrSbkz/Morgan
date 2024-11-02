@@ -30,8 +30,7 @@ void UMorganWeaponComponent::SpawnWeapon()
 	AttachWeaponToSocket(Character->GetMesh());
 }
 
-void UMorganWeaponComponent::AttachWeaponToSocket(
-	USceneComponent* SceneComponent) const
+void UMorganWeaponComponent::AttachWeaponToSocket(USceneComponent* SceneComponent) const
 {
 	if (!SceneComponent) return;
 
