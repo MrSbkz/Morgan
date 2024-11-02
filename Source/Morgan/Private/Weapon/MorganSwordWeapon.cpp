@@ -20,7 +20,8 @@ void AMorganSwordWeapon::BeginPlay()
 	SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
 
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMorganSwordWeapon::Attack, 5.0f, true);
+	const float RandomRate = FMath::RandRange(1.0f, 5.0f);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMorganSwordWeapon::Attack, RandomRate, true);
 }
 
 void AMorganSwordWeapon::InitAnimations()
@@ -30,28 +31,28 @@ void AMorganSwordWeapon::InitAnimations()
 	if (UMorganSwordAttackEnableAnimNotify* SwordAttackEnableAnimNotify =
 		AnimUtils::FindAnimNotifyByClass<UMorganSwordAttackEnableAnimNotify>(AttackAnimation))
 	{
-		SwordAttackEnableAnimNotify->OnNotify.AddUObject(this, &AMorganSwordWeapon::OnSwordCollisionEnabled);
+		SwordAttackEnableAnimNotify->OnNotify.AddLambda([this](const USkeletalMeshComponent* MeshComp)
+		{
+			if (!IsSameCharacter(MeshComp)) return;
+
+			SwordCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+		});
 	}
 
 	if (UMorganSwordAttackDisableAnimNotify* SwordAttackDisableAnimNotify =
 		AnimUtils::FindAnimNotifyByClass<UMorganSwordAttackDisableAnimNotify>(AttackAnimation))
 	{
-		SwordAttackDisableAnimNotify->OnNotify.AddUObject(this, &AMorganSwordWeapon::OnSwordCollisionDisabled);
+		SwordAttackDisableAnimNotify->OnNotify.AddLambda([this](const USkeletalMeshComponent* MeshComp)
+		{
+			if (!IsSameCharacter(MeshComp)) return;
+
+			SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+		});
 	}
 }
 
-void AMorganSwordWeapon::OnSwordCollisionEnabled(USkeletalMeshComponent* MeshComp)
+bool AMorganSwordWeapon::IsSameCharacter(const USkeletalMeshComponent* MeshComp) const
 {
 	const ACharacter* Character = Cast<ACharacter>(GetOwner());
-	if (!Character || Character->GetMesh() != MeshComp) return;
-
-	SwordCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
-}
-
-void AMorganSwordWeapon::OnSwordCollisionDisabled(USkeletalMeshComponent* MeshComp)
-{
-	const ACharacter* Character = Cast<ACharacter>(GetOwner());
-	if (!Character || Character->GetMesh() != MeshComp) return;
-
-	SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	return Character && Character->GetMesh() == MeshComp;
 }

@@ -24,6 +24,5 @@ protected:
 	TObjectPtr<UCapsuleComponent> SwordCollision;
 
 private:
-	void OnSwordCollisionEnabled(USkeletalMeshComponent* MeshComp);
-	void OnSwordCollisionDisabled(USkeletalMeshComponent* MeshComp);
+	bool IsSameCharacter(const USkeletalMeshComponent* MeshComp) const;
 };
