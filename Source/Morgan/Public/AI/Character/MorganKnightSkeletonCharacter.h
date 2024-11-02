@@ -11,7 +11,9 @@ class MORGAN_API AMorganKnightSkeletonCharacter : public AMorganCharacterBase
 {
 	GENERATED_BODY()
 
-protected:	
+protected:
+	virtual void OnDeath() override;
+
 	UPROPERTY(EditDefaultsOnly, Category="EnemyLevel", meta=(ClampMin="1", ClampMax="3"))
 	int32 Level = 1;
 };

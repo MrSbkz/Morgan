@@ -36,12 +36,21 @@ void AMorganPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		}
 	}
 
-
 	if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		Input->BindAction(InputDataConfig->Move, ETriggerEvent::Triggered, this, &AMorganPlayerCharacter::Move);
 		Input->BindAction(InputDataConfig->Look, ETriggerEvent::Triggered, this, &AMorganPlayerCharacter::Look);
 		Input->BindAction(InputDataConfig->Attack, ETriggerEvent::Started, this, &AMorganPlayerCharacter::Attack);
+	}
+}
+
+void AMorganPlayerCharacter::OnDeath()
+{
+	Super::OnDeath();
+
+	if (DeathAnimMontage)
+	{
+		PlayAnimMontage(DeathAnimMontage);
 	}
 }
 
@@ -77,4 +86,3 @@ void AMorganPlayerCharacter::Attack()
 {
 	WeaponComponent->Attack();
 }
-
