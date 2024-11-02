@@ -19,12 +19,13 @@ void AMorganCharacterBase::BeginPlay()
 
 	check(HealthComponent);
 
-	HealthComponent->OnDeath.AddLambda([this]
-	{
-		SetLifeSpan(5.0f);
-		GetCharacterMovement()->DisableMovement();
-		GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
-		GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-		GetMesh()->SetSimulatePhysics(true);
-	});
+	HealthComponent->OnDeath.AddUObject(this, &AMorganCharacterBase::OnDeath);
+}
+
+void AMorganCharacterBase::OnDeath()
+{
+	SetLifeSpan(5.0f);
+	GetCharacterMovement()->DisableMovement();
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 }

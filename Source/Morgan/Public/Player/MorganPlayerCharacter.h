@@ -21,6 +21,9 @@ public:
 	AMorganPlayerCharacter();
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+protected:
+	virtual void OnDeath() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
 
@@ -32,6 +35,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UMorganInputDataConfig> InputDataConfig;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	TObjectPtr<UAnimMontage> DeathAnimMontage;
 
 private:
 	void Move(const FInputActionValue& Value);

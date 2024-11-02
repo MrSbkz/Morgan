@@ -5,6 +5,7 @@
 #include "Animations/MorganSwordAttackDisableAnimNotify.h"
 #include "Animations/MorganSwordAttackEnableAnimNotify.h"
 #include "Components/CapsuleComponent.h"
+#include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
 
 AMorganSwordWeapon::AMorganSwordWeapon()
@@ -17,7 +18,11 @@ void AMorganSwordWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	if (SwordCollision)
+	{
+		SwordCollision->OnComponentBeginOverlap.AddDynamic(this, &AMorganSwordWeapon::OnSwordBeginOverlap);
+		SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	}
 
 	FTimerHandle TimerHandle;
 	const float RandomRate = FMath::RandRange(1.0f, 5.0f);
@@ -36,6 +41,7 @@ void AMorganSwordWeapon::InitAnimations()
 			if (!IsSameCharacter(MeshComp)) return;
 
 			SwordCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+			SwordCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		});
 	}
 
@@ -47,12 +53,27 @@ void AMorganSwordWeapon::InitAnimations()
 			if (!IsSameCharacter(MeshComp)) return;
 
 			SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+			SwordCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		});
 	}
 }
 
 bool AMorganSwordWeapon::IsSameCharacter(const USkeletalMeshComponent* MeshComp) const
 {
-	const ACharacter* Character = Cast<ACharacter>(GetOwner());
+	const ACharacter* Character = Cast<ACharacter>(Owner);
 	return Character && Character->GetMesh() == MeshComp;
+}
+
+void AMorganSwordWeapon::OnSwordBeginOverlap(
+	UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+	if (OtherActor != GetOwner())
+	{
+		OtherActor->TakeDamage(DamageAmount, FDamageEvent(), GetController(), GetOwner());
+	}
 }
