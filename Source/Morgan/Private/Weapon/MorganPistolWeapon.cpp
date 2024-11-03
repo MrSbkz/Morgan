@@ -2,14 +2,56 @@
 
 #include "Weapon/MorganPistolWeapon.h"
 
+#include "Animations/AnimUtils.h"
+#include "Animations/MorganReloadFinishedAnimNotify.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
 
 void AMorganPistolWeapon::Attack()
 {
-	if(IsAttackAnimInProgress) return;
+	if (IsAttackAnimInProgress || IsReloadAnimInProgress) return;
 	MakeShot();
+	--BulletsLeft;
+	UE_LOG(LogTemp, Warning, TEXT("Bullets left: %i"), BulletsLeft);
 	Super::Attack();
+}
+
+void AMorganPistolWeapon::Reload()
+{
+	Super::Reload();
+
+	if (BulletsLeft < BulletsAmount)
+	{
+		StartReloading();
+	}
+}
+
+void AMorganPistolWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+
+	BulletsLeft = BulletsAmount;
+	IsReloadAnimInProgress = false;
+}
+
+void AMorganPistolWeapon::InitAnimations()
+{
+	Super::InitAnimations();
+
+	if (UMorganReloadFinishedAnimNotify* ReloadFinishedAnimNotify =
+		AnimUtils::FindAnimNotifyByClass<UMorganReloadFinishedAnimNotify>(ReloadAnimation))
+	{
+		ReloadFinishedAnimNotify->OnNotify.AddUObject(this, &AMorganPistolWeapon::OnReloadAnimationFinished);
+	}
+}
+
+void AMorganPistolWeapon::PostAttackAnimFinished()
+{
+	Super::PostAttackAnimFinished();
+	if (BulletsLeft == 0)
+	{
+		StartReloading();
+	}
 }
 
 void AMorganPistolWeapon::MakeShot() const
@@ -62,4 +104,20 @@ void AMorganPistolWeapon::MakeHit(FHitResult& Hit, const FVector& TraceStart, co
 		GetController(),
 		GetOwner()
 	);
+}
+
+void AMorganPistolWeapon::OnReloadAnimationFinished(USkeletalMeshComponent* MeshComp)
+{
+	if (!IsSameCharacter(MeshComp)) return;
+
+	IsReloadAnimInProgress = false;
+	BulletsLeft = BulletsAmount;
+	UE_LOG(LogTemp, Warning, TEXT("Finish reloading"));
+}
+
+void AMorganPistolWeapon::StartReloading()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Start reloading"));
+	IsReloadAnimInProgress = true;
+	PlayAnimMontage(ReloadAnimation);
 }

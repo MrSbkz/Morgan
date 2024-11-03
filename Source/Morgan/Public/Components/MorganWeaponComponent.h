@@ -15,6 +15,7 @@ class MORGAN_API UMorganWeaponComponent : public UActorComponent
 
 public:
 	void Attack() const;
+	void Reload() const;
 
 protected:
 	virtual void BeginPlay() override;

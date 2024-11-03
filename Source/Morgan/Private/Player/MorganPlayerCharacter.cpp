@@ -41,6 +41,7 @@ void AMorganPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		Input->BindAction(InputDataConfig->Move, ETriggerEvent::Triggered, this, &AMorganPlayerCharacter::Move);
 		Input->BindAction(InputDataConfig->Look, ETriggerEvent::Triggered, this, &AMorganPlayerCharacter::Look);
 		Input->BindAction(InputDataConfig->Attack, ETriggerEvent::Started, this, &AMorganPlayerCharacter::Attack);
+		Input->BindAction(InputDataConfig->PistolReload, ETriggerEvent::Started, this, &AMorganPlayerCharacter::Reload);
 	}
 }
 
@@ -85,4 +86,9 @@ void AMorganPlayerCharacter::Look(const FInputActionValue& Value)
 void AMorganPlayerCharacter::Attack()
 {
 	WeaponComponent->Attack();
+}
+
+void AMorganPlayerCharacter::Reload()
+{
+	WeaponComponent->Reload();
 }

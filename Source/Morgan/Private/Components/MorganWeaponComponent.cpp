@@ -11,6 +11,11 @@ void UMorganWeaponComponent::Attack() const
 	Weapon->Attack();
 }
 
+void UMorganWeaponComponent::Reload() const
+{
+	Weapon->Reload();
+}
+
 void UMorganWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
