@@ -1,7 +1,6 @@
 ﻿// Copyrights P.K.
 
 #include "Weapon/MorganWeaponBase.h"
-
 #include "Animations/AnimUtils.h"
 #include "Animations/MorganAttackFinishedAnimNotify.h"
 #include "GameFramework/Character.h"
@@ -61,4 +60,5 @@ void AMorganWeaponBase::OnAttackAnimationFinished(USkeletalMeshComponent* MeshCo
 	if (!IsSameCharacter(MeshComp)) return;
 
 	IsAttackAnimInProgress = false;
+	PostAttackAnimFinished();
 }

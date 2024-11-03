@@ -23,4 +23,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* Attack;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* PistolReload;
 };

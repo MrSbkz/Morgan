@@ -15,10 +15,20 @@ public:
 	AMorganWeaponBase();
 	virtual void Attack();
 
+	virtual void Reload()
+	{
+	};
+
 protected:
 	virtual void BeginPlay() override;
-	AController* GetController() const;
 	virtual void InitAnimations();
+	virtual void PlayAnimMontage(UAnimMontage* AnimMontage) const;
+
+	virtual void PostAttackAnimFinished()
+	{
+	};
+
+	AController* GetController() const;
 	bool IsSameCharacter(const USkeletalMeshComponent* MeshComp) const;
 
 	UPROPERTY(EditDefaultsOnly, Category="Components")
@@ -33,7 +43,5 @@ protected:
 	bool IsAttackAnimInProgress;
 
 private:
-	void PlayAnimMontage(UAnimMontage* AnimMontage) const;
-
 	void OnAttackAnimationFinished(USkeletalMeshComponent* MeshComp);
 };
