@@ -1,7 +1,6 @@
 ﻿// Copyrights P.K.
 
 #include "Weapon/MorganPistolWeapon.h"
-
 #include "Animations/AnimUtils.h"
 #include "Animations/MorganReloadFinishedAnimNotify.h"
 #include "Engine/DamageEvents.h"
@@ -12,6 +11,7 @@ void AMorganPistolWeapon::Attack()
 	if (IsAttackAnimInProgress || IsReloadAnimInProgress) return;
 	MakeShot();
 	--BulletsLeft;
+	OnBulletsUpdated.Broadcast(BulletsLeft);
 	UE_LOG(LogTemp, Warning, TEXT("Bullets left: %i"), BulletsLeft);
 	Super::Attack();
 }
@@ -112,6 +112,7 @@ void AMorganPistolWeapon::OnReloadAnimationFinished(USkeletalMeshComponent* Mesh
 
 	IsReloadAnimInProgress = false;
 	BulletsLeft = BulletsAmount;
+	OnBulletsUpdated.Broadcast(BulletsLeft);
 	UE_LOG(LogTemp, Warning, TEXT("Finish reloading"));
 }
 

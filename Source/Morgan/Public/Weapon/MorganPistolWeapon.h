@@ -6,6 +6,8 @@
 #include "MorganWeaponBase.h"
 #include "MorganPistolWeapon.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnBulletsUpdatedSignature, const int32);
+
 UCLASS()
 class MORGAN_API AMorganPistolWeapon : public AMorganWeaponBase
 {
@@ -14,9 +16,12 @@ class MORGAN_API AMorganPistolWeapon : public AMorganWeaponBase
 public:
 	virtual void Attack() override;
 	virtual void Reload() override;
+	int32 GetBulletsAmount() const { return BulletsAmount; }
 
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	float TraceMaxDistance = 1500.0f;
+
+	FOnBulletsUpdatedSignature OnBulletsUpdated;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> ReloadAnimation;

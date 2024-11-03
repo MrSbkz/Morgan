@@ -33,6 +33,7 @@ void UMorganWeaponComponent::SpawnWeapon()
 
 	Weapon->SetOwner(Character);
 	AttachWeaponToSocket(Character->GetMesh());
+	OnWeaponSpawned.Broadcast(Weapon);
 }
 
 void UMorganWeaponComponent::AttachWeaponToSocket(USceneComponent* SceneComponent) const
