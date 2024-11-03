@@ -19,6 +19,7 @@ protected:
 	virtual void BeginPlay() override;
 	AController* GetController() const;
 	virtual void InitAnimations();
+	bool IsSameCharacter(const USkeletalMeshComponent* MeshComp) const;
 
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	TObjectPtr<UStaticMeshComponent> Mesh;
@@ -33,4 +34,6 @@ protected:
 
 private:
 	void PlayAnimMontage(UAnimMontage* AnimMontage) const;
+
+	void OnAttackAnimationFinished(USkeletalMeshComponent* MeshComp);
 };

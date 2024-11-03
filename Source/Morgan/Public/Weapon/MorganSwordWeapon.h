@@ -24,7 +24,6 @@ protected:
 	TObjectPtr<UCapsuleComponent> SwordCollision;
 
 private:
-	bool IsSameCharacter(const USkeletalMeshComponent* MeshComp) const;
 
 	UFUNCTION()
 	void OnSwordBeginOverlap(
@@ -34,4 +33,7 @@ private:
 		int32 OtherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
+
+	void OnSwordAttackEnabled(USkeletalMeshComponent* MeshComp);
+	void OnSwordAttackDisabled(USkeletalMeshComponent* MeshComp);
 };

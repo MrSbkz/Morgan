@@ -7,6 +7,7 @@
 #include "MorganHealthComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class MORGAN_API UMorganHealthComponent : public UActorComponent
@@ -15,6 +16,7 @@ class MORGAN_API UMorganHealthComponent : public UActorComponent
 
 public:
 	FOnDeathSignature OnDeath;
+	FOnHealthChangedSignature OnHealthChanged;
 
 protected:
 	virtual void BeginPlay() override;

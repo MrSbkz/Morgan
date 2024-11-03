@@ -38,14 +38,14 @@ void AMorganWeaponBase::InitAnimations()
 	if (UMorganAttackFinishedAnimNotify* AttackFinishedAnimNotify =
 		AnimUtils::FindAnimNotifyByClass<UMorganAttackFinishedAnimNotify>(AttackAnimation))
 	{
-		AttackFinishedAnimNotify->OnNotify.AddLambda([this](const USkeletalMeshComponent* MeshComp)
-		{
-			const ACharacter* Character = Cast<ACharacter>(GetOwner());
-			if (!Character || Character->GetMesh() != MeshComp) return;
-
-			IsAttackAnimInProgress = false;
-		});
+		AttackFinishedAnimNotify->OnNotify.AddUObject(this, &AMorganWeaponBase::OnAttackAnimationFinished);
 	}
+}
+
+bool AMorganWeaponBase::IsSameCharacter(const USkeletalMeshComponent* MeshComp) const
+{
+	const ACharacter* Character = Cast<ACharacter>(Owner);
+	return Character && Character->GetMesh() == MeshComp;
 }
 
 void AMorganWeaponBase::PlayAnimMontage(UAnimMontage* AnimMontage) const
@@ -54,4 +54,11 @@ void AMorganWeaponBase::PlayAnimMontage(UAnimMontage* AnimMontage) const
 	if (!Character) return;
 
 	Character->PlayAnimMontage(AnimMontage);
+}
+
+void AMorganWeaponBase::OnAttackAnimationFinished(USkeletalMeshComponent* MeshComp)
+{
+	if (!IsSameCharacter(MeshComp)) return;
+
+	IsAttackAnimInProgress = false;
 }
