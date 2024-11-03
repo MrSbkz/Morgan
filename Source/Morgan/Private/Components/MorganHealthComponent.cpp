@@ -18,6 +18,8 @@ void UMorganHealthComponent::SetHealth(const float NewHealth)
 {
 	Health = NewHealth;
 
+	OnHealthChanged.Broadcast(Health / MaxHealth);
+
 	if (Health <= 0.0f)
 	{
 		OnDeath.Broadcast();

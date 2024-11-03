@@ -36,32 +36,14 @@ void AMorganSwordWeapon::InitAnimations()
 	if (UMorganSwordAttackEnableAnimNotify* SwordAttackEnableAnimNotify =
 		AnimUtils::FindAnimNotifyByClass<UMorganSwordAttackEnableAnimNotify>(AttackAnimation))
 	{
-		SwordAttackEnableAnimNotify->OnNotify.AddLambda([this](const USkeletalMeshComponent* MeshComp)
-		{
-			if (!IsSameCharacter(MeshComp)) return;
-
-			SwordCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
-			SwordCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		});
+		SwordAttackEnableAnimNotify->OnNotify.AddUObject(this, &AMorganSwordWeapon::OnSwordAttackEnabled);
 	}
 
 	if (UMorganSwordAttackDisableAnimNotify* SwordAttackDisableAnimNotify =
 		AnimUtils::FindAnimNotifyByClass<UMorganSwordAttackDisableAnimNotify>(AttackAnimation))
 	{
-		SwordAttackDisableAnimNotify->OnNotify.AddLambda([this](const USkeletalMeshComponent* MeshComp)
-		{
-			if (!IsSameCharacter(MeshComp)) return;
-
-			SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
-			SwordCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		});
+		SwordAttackDisableAnimNotify->OnNotify.AddUObject(this, &AMorganSwordWeapon::OnSwordAttackDisabled);
 	}
-}
-
-bool AMorganSwordWeapon::IsSameCharacter(const USkeletalMeshComponent* MeshComp) const
-{
-	const ACharacter* Character = Cast<ACharacter>(Owner);
-	return Character && Character->GetMesh() == MeshComp;
 }
 
 void AMorganSwordWeapon::OnSwordBeginOverlap(
@@ -76,4 +58,20 @@ void AMorganSwordWeapon::OnSwordBeginOverlap(
 	{
 		OtherActor->TakeDamage(DamageAmount, FDamageEvent(), GetController(), GetOwner());
 	}
+}
+
+void AMorganSwordWeapon::OnSwordAttackEnabled(USkeletalMeshComponent* MeshComp)
+{
+	if (!IsSameCharacter(MeshComp)) return;
+
+	SwordCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+	SwordCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void AMorganSwordWeapon::OnSwordAttackDisabled(USkeletalMeshComponent* MeshComp)
+{
+	if (!IsSameCharacter(MeshComp)) return;
+
+	SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	SwordCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
