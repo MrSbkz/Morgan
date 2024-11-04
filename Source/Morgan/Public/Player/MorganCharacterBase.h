@@ -20,7 +20,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnDeath();
-	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<UMorganWeaponComponent> WeaponComponent;
