@@ -20,7 +20,6 @@ class MORGAN_API AMorganPlayerCharacter : public AMorganCharacterBase
 
 public:
 	AMorganPlayerCharacter();
-	//virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
 	virtual void OnDeath() override;
