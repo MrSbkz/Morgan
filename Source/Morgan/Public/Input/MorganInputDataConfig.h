@@ -26,4 +26,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* PistolReload;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* OpenBuildingMenu;
 };

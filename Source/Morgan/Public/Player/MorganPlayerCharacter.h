@@ -6,6 +6,7 @@
 #include "Player/MorganCharacterBase.h"
 #include "MorganPlayerCharacter.generated.h"
 
+class UMorganBuildingComponent;
 struct FInputActionValue;
 class UMorganInputDataConfig;
 class UInputMappingContext;
@@ -19,7 +20,7 @@ class MORGAN_API AMorganPlayerCharacter : public AMorganCharacterBase
 
 public:
 	AMorganPlayerCharacter();
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	//virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
 	virtual void OnDeath() override;
@@ -29,19 +30,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> DefaultMappingContext;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UMorganInputDataConfig> InputDataConfig;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
+	TObjectPtr<UMorganBuildingComponent> BuildingComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathAnimMontage;
-
-private:
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Attack();
-	void Reload();
 };
