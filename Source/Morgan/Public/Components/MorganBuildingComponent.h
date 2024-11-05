@@ -15,4 +15,9 @@ class MORGAN_API UMorganBuildingComponent : public UActorComponent
 
 public:
 	FOnMenuOpenedSignature OnMenuOpened;
+
+	void OpenCloseMenu();
+
+private:
+	bool IsMenuOpened = false;
 };

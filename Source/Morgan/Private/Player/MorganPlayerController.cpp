@@ -13,14 +13,6 @@ void AMorganPlayerController::BeginPlay()
 
 	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = false;
-
-	if (GetPawn())
-	{
-		if (const auto WeaponComponent = GetPawn()->FindComponentByClass<UMorganBuildingComponent>())
-		{
-			WeaponComponent->OnMenuOpened.AddUObject(this, &AMorganPlayerController::OnWidgetOpened);
-		}
-	}
 }
 
 void AMorganPlayerController::SetupInputComponent()
@@ -41,8 +33,18 @@ void AMorganPlayerController::SetupInputComponent()
 		Input->BindAction(InputDataConfig->Move, ETriggerEvent::Triggered, this, &AMorganPlayerController::Move);
 		Input->BindAction(InputDataConfig->Look, ETriggerEvent::Triggered, this, &AMorganPlayerController::Look);
 		Input->BindAction(InputDataConfig->Attack, ETriggerEvent::Started, this, &AMorganPlayerController::Attack);
-		Input->BindAction(InputDataConfig->PistolReload, ETriggerEvent::Started, this,
-		                  &AMorganPlayerController::Reload);
+		Input->BindAction(
+			InputDataConfig->PistolReload,
+			ETriggerEvent::Started,
+			this,
+			&AMorganPlayerController::Reload
+		);
+		Input->BindAction(
+			InputDataConfig->OpenBuildingMenu,
+			ETriggerEvent::Started,
+			this,
+			&AMorganPlayerController::OpenBuildingMenu
+		);
 	}
 }
 
@@ -92,16 +94,12 @@ void AMorganPlayerController::Reload()
 	}
 }
 
-void AMorganPlayerController::OnWidgetOpened(const bool IsOpened)
+void AMorganPlayerController::OpenBuildingMenu()
 {
-	if(IsOpened)
+	if (!GetPawn()) return;
+
+	if (const auto BuildingComponent = GetPawn()->FindComponentByClass<UMorganBuildingComponent>())
 	{
-		SetInputMode(FInputModeUIOnly());
-		bShowMouseCursor = true;
-	}
-	else
-	{
-		SetInputMode(FInputModeGameOnly());
-		bShowMouseCursor = false;
+		BuildingComponent->OpenCloseMenu();
 	}
 }
