@@ -32,5 +32,5 @@ private:
 	void Look(const FInputActionValue& Value);
 	void Attack();
 	void Reload();
-	void OnWidgetOpened(bool IsOpened);
+	void OpenBuildingMenu();
 };
