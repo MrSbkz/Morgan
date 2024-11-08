@@ -10,7 +10,6 @@ struct FInputActionValue;
 class UMorganInputDataConfig;
 class UInputMappingContext;
 class UInputAction;
-class UInputMappingContext;
 
 UCLASS()
 class MORGAN_API AMorganPlayerController : public APlayerController

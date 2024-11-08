@@ -18,6 +18,10 @@ class MORGAN_API UMorganBuildingItemWidget : public UUserWidget
 
 public:
 	void SetItemData(const FBuildingItemData& ItemData) const;
+	void SetItemType(EBuildingItemType Type);
+
+protected:
+	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UImage> ItemImage;
@@ -27,4 +31,9 @@ public:
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UButton> SelectItemButton;
+
+private:
+	UFUNCTION()
+	void OnButtonClicked();
+	EBuildingItemType ItemType;
 };
