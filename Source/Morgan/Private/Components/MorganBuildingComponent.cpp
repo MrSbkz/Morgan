@@ -1,14 +1,12 @@
 ﻿// Copyrights P.K.
 
 #include "Components/MorganBuildingComponent.h"
-
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Actors/MorganBuildingActorBase.h"
 #include "UI/MorganHUD.h"
 #include "Engine/World.h"
 #include "Game/MorganGameMode.h"
-#include "GameFramework/Character.h"
 
 UMorganBuildingComponent::UMorganBuildingComponent()
 {
@@ -19,10 +17,7 @@ void UMorganBuildingComponent::OpenCloseMenu()
 {
 	if (!GetOwner()) return;
 
-	const APawn* Pawn = Cast<APawn>(GetOwner());
-	if (!Pawn) return;
-
-	APlayerController* PlayerController = Cast<APlayerController>(Pawn->GetController());
+	APlayerController* PlayerController = GetPlayerController();
 	if (!PlayerController) return;
 
 	const AMorganHUD* GameHUD = Cast<AMorganHUD>(PlayerController->GetHUD());
@@ -159,19 +154,23 @@ void UMorganBuildingComponent::StartPreview(const FVector& TraceStart, FVector& 
 
 void UMorganBuildingComponent::CompleteBuilding()
 {
+	if(!CurrentBuildingActor->CanBuild()) return;
+	
 	const APlayerController* PlayerController = GetPlayerController();
 	
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 	{
 		Subsystem->RemoveMappingContext(BuildingMappingContext);
 	}
+	CurrentBuildingActor->Activate();
+	
 	IsBuildingMode = false;
 	CurrentBuildingActor = nullptr;
 }
 
 APlayerController* UMorganBuildingComponent::GetPlayerController() const
 {
-	const ACharacter* Character = Cast<ACharacter>(GetOwner());
+	const APawn* Character = Cast<APawn>(GetOwner());
 	if (!Character) return nullptr;
 
 	return Character->GetController<APlayerController>();
