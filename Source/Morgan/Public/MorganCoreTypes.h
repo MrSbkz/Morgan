@@ -2,6 +2,16 @@
 
 #include "MorganCoreTypes.generated.h"
 
+class AMorganBuildingActorBase;
+
+UENUM(BlueprintType)
+enum class EBuildingItemType : uint8
+{
+	None,
+	Cannon,
+	Barrel
+};
+
 USTRUCT()
 struct FBuildingItemData
 {
@@ -11,5 +21,8 @@ struct FBuildingItemData
 	int32 ItemCost = 0;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Building")
-	UTexture2D* ItemImage = nullptr;
+	TObjectPtr<UTexture2D> ItemImage = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Building")
+	TSubclassOf<AMorganBuildingActorBase> BuildingItemClass;
 };

@@ -15,9 +15,9 @@ class MORGAN_API AMorganGameMode : public AGameModeBase
 public:
 	AMorganGameMode();
 
-	TArray<FBuildingItemData> GetBuildingItems() { return BuildingItems; }
+	TMap<EBuildingItemType, FBuildingItemData> GetBuildingItems() { return BuildingItems; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category="Building")
-	TArray<FBuildingItemData> BuildingItems;
+	TMap<EBuildingItemType, FBuildingItemData> BuildingItems;
 };

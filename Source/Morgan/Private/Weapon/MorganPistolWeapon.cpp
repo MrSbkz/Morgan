@@ -12,7 +12,6 @@ void AMorganPistolWeapon::Attack()
 	MakeShot();
 	--BulletsLeft;
 	OnBulletsUpdated.Broadcast(BulletsLeft);
-	UE_LOG(LogTemp, Warning, TEXT("Bullets left: %i"), BulletsLeft);
 	Super::Attack();
 }
 
@@ -59,8 +58,7 @@ void AMorganPistolWeapon::MakeShot() const
 	FVector TraceStart, TraceEnd;
 	GetTraceData(TraceStart, TraceEnd);
 
-	FHitResult HitResult;
-	MakeHit(HitResult, TraceStart, TraceEnd);
+	MakeHit(TraceStart, TraceEnd);
 }
 
 void AMorganPistolWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
@@ -78,13 +76,14 @@ void AMorganPistolWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) c
 	TraceEnd = TraceStart + ViewRotation.Vector() * TraceMaxDistance;
 }
 
-void AMorganPistolWeapon::MakeHit(FHitResult& Hit, const FVector& TraceStart, const FVector& TraceEnd) const
+void AMorganPistolWeapon::MakeHit(const FVector& TraceStart, const FVector& TraceEnd) const
 {
 	if (!GetWorld()) return;
 
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(GetOwner());
 
+	FHitResult Hit;
 	GetWorld()->LineTraceSingleByChannel(
 		Hit,
 		TraceStart,
@@ -113,12 +112,10 @@ void AMorganPistolWeapon::OnReloadAnimationFinished(USkeletalMeshComponent* Mesh
 	IsReloadAnimInProgress = false;
 	BulletsLeft = BulletsAmount;
 	OnBulletsUpdated.Broadcast(BulletsLeft);
-	UE_LOG(LogTemp, Warning, TEXT("Finish reloading"));
 }
 
 void AMorganPistolWeapon::StartReloading()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Start reloading"));
 	IsReloadAnimInProgress = true;
 	PlayAnimMontage(ReloadAnimation);
 }

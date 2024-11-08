@@ -1,7 +1,6 @@
 ﻿// Copyrights P.K.
 
 #include "UI/MorganBuildingMenuWidget.h"
-
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
@@ -24,15 +23,18 @@ void UMorganBuildingMenuWidget::NativeConstruct()
 		BuildingItemsHorizontalBox->ClearChildren();
 		if (AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode()))
 		{
-			const TArray<FBuildingItemData> BuildingItems = GameMode->GetBuildingItems();
+			const TMap<EBuildingItemType, FBuildingItemData> BuildingItems = GameMode->GetBuildingItems();
 
-			for (int i = 0; i < BuildingItems.Num(); ++i)
+			uint8 i = 0;
+			for (auto BuildingItemPair : BuildingItems)
 			{
+				++i;
 				UMorganBuildingItemWidget* BuildingItemWidget = CreateWidget<UMorganBuildingItemWidget>(
 					GetWorld(),
 					BuildingItemWidgetClass);
 
-				BuildingItemWidget->SetItemData(BuildingItems[i]);
+				BuildingItemWidget->SetItemData(BuildingItemPair.Value);
+				BuildingItemWidget->SetItemType(BuildingItemPair.Key);
 				BuildingItemsHorizontalBox->AddChild(BuildingItemWidget);
 
 				if (i == BuildingItems.Num() - 1) continue;

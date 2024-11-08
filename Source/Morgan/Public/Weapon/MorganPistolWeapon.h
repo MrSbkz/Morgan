@@ -37,7 +37,7 @@ protected:
 private:
 	void MakeShot() const;
 	void GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
-	void MakeHit(FHitResult& Hit, const FVector& TraceStart, const FVector& TraceEnd) const;
+	void MakeHit(const FVector& TraceStart, const FVector& TraceEnd) const;
 	void OnReloadAnimationFinished(USkeletalMeshComponent* MeshComp);
 	void StartReloading();
 
