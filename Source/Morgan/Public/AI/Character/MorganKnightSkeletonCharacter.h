@@ -6,6 +6,7 @@
 #include "Player/MorganCharacterBase.h"
 #include "MorganKnightSkeletonCharacter.generated.h"
 
+class AMorganChestPickUp;
 class UWidgetComponent;
 
 UCLASS()
@@ -29,9 +30,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="UI")
 	float HealthWidgetLifeTime = 3.0f;
 
+	UPROPERTY(EditAnywhere, Category="Loot")
+	bool HasLoot = false;
+
+	UPROPERTY(EditDefaultsOnly, Category="Loot")
+	TSubclassOf<AMorganChestPickUp> LootClass;
+
 private:
 	void OnHealthChanged(float HealthPercent);
 	void OnWidgetLifeTimeFinished();
+	void SpawnLoot() const;
 
 	FTimerHandle WidgetLifeTimeTimerHandle;
 };
