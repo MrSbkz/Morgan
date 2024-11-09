@@ -15,6 +15,13 @@ AMorganChestPickUp::AMorganChestPickUp()
 	SetRootComponent(Collision);
 }
 
+void AMorganChestPickUp::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetLifeSpan(LifeTime);
+}
+
 void AMorganChestPickUp::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

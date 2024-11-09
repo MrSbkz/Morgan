@@ -17,6 +17,7 @@ public:
 	AMorganChestPickUp();
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
@@ -25,4 +26,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Pickups")
 	int32 GoldAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category="Pickups")
+	float LifeTime = 10.0f;
 };

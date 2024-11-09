@@ -3,6 +3,7 @@
 #include "AI/Character/MorganKnightSkeletonCharacter.h"
 #include "Components/MorganHealthComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Pickups/MorganChestPickUp.h"
 #include "UI/MorganHealthBarWidget.h"
 
 AMorganKnightSkeletonCharacter::AMorganKnightSkeletonCharacter()
@@ -26,6 +27,7 @@ void AMorganKnightSkeletonCharacter::OnDeath()
 
 	GetMesh()->SetSimulatePhysics(true);
 	OnWidgetLifeTimeFinished();
+	SpawnLoot();
 }
 
 void AMorganKnightSkeletonCharacter::OnHealthChanged(const float HealthPercent)
@@ -52,4 +54,15 @@ void AMorganKnightSkeletonCharacter::OnHealthChanged(const float HealthPercent)
 void AMorganKnightSkeletonCharacter::OnWidgetLifeTimeFinished()
 {
 	HealthWidgetComponent->SetVisibility(false);
+}
+
+void AMorganKnightSkeletonCharacter::SpawnLoot() const
+{
+	if (!HasLoot || !GetWorld()) return;
+
+	FVector CharacterLocation = GetActorLocation();
+	CharacterLocation.Z = +50.0f;
+	FTransform Transform;
+	Transform.SetLocation(CharacterLocation);
+	GetWorld()->SpawnActor<AMorganChestPickUp>(LootClass, Transform);
 }
