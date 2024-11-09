@@ -5,5 +5,5 @@
 void AMorganPlayerState::AddGold(const int32 Gold)
 {
 	GoldAmount += Gold;
-	OnGoldAmountChanged.Broadcast(Gold);
+	OnGoldAmountChanged.Broadcast(GoldAmount, Gold);
 }
