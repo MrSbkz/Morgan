@@ -15,6 +15,8 @@ class MORGAN_API UMorganHealthComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	bool IsDead() const { return Health <= 0.0f; }
+
 	FOnDeathSignature OnDeath;
 	FOnHealthChangedSignature OnHealthChanged;
 
