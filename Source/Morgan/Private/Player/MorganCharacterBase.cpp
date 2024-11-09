@@ -28,4 +28,5 @@ void AMorganCharacterBase::OnDeath()
 	GetCharacterMovement()->DisableMovement();
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	WeaponComponent->DestroyWeapon();
 }

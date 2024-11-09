@@ -16,6 +16,14 @@ void UMorganWeaponComponent::Reload() const
 	Weapon->Reload();
 }
 
+void UMorganWeaponComponent::DestroyWeapon() const
+{
+	if (Weapon)
+	{
+		Weapon->Destroy();
+	}
+}
+
 void UMorganWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();

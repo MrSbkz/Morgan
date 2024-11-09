@@ -18,6 +18,7 @@ class MORGAN_API UMorganWeaponComponent : public UActorComponent
 public:
 	void Attack() const;
 	void Reload() const;
+	void DestroyWeapon() const;
 	
 	FOnWeaponSpawnedSignature OnWeaponSpawned;
 
