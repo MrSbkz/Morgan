@@ -30,4 +30,6 @@ protected:
 private:
 	UFUNCTION()
 	void OnCloseMenu();
+
+	void InitItems() const;
 };

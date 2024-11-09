@@ -7,6 +7,7 @@
 #include "UI/MorganHUD.h"
 #include "Engine/World.h"
 #include "Game/MorganGameMode.h"
+#include "Player/MorganPlayerState.h"
 
 UMorganBuildingComponent::UMorganBuildingComponent()
 {
@@ -40,8 +41,9 @@ void UMorganBuildingComponent::OpenCloseMenu()
 			CurrentBuildingActor = nullptr;
 		}
 		IsBuildingMode = false;
-		
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->RemoveMappingContext(BuildingMappingContext);
 		}
@@ -59,18 +61,17 @@ void UMorganBuildingComponent::StartBuilding(const EBuildingItemType BuildingIte
 	const APlayerController* PlayerController = GetPlayerController();
 	if (!PlayerController) return;
 
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
+		PlayerController->GetLocalPlayer()))
 	{
 		Subsystem->AddMappingContext(BuildingMappingContext, 1);
 	}
 
-	AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode());
-	if (!GameMode) return;
-
-	TMap<EBuildingItemType, FBuildingItemData> BuildingItems = GameMode->GetBuildingItems();
+	TMap<EBuildingItemType, FBuildingItemData> BuildingItems = GetBuildingItems();
 	if (!BuildingItems.Contains(BuildingItemType)) return;
 
 	CurrentBuildingActorClass = BuildingItems[BuildingItemType].BuildingItemClass;
+	CurrentItemCost = BuildingItems[BuildingItemType].ItemCost;
 
 	IsBuildingMode = true;
 }
@@ -84,7 +85,8 @@ void UMorganBuildingComponent::BeginPlay()
 
 	if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
 	{
-		Input->BindAction(CompleteBuildingAction, ETriggerEvent::Triggered, this, &UMorganBuildingComponent::CompleteBuilding);
+		Input->BindAction(CompleteBuildingAction, ETriggerEvent::Triggered, this,
+		                  &UMorganBuildingComponent::CompleteBuilding);
 	}
 }
 
@@ -111,8 +113,8 @@ void UMorganBuildingComponent::GetTraceData(FVector& TraceStart, FVector& TraceE
 	FRotator ViewRotation;
 
 	const APlayerController* PlayerController = GetPlayerController();
-	if(!PlayerController) return;
-	
+	if (!PlayerController) return;
+
 	PlayerController->GetPlayerViewPoint(TraceStart, ViewRotation);
 
 	TraceEnd = TraceStart + ViewRotation.Vector() * TraceMaxDistance;
@@ -154,16 +156,22 @@ void UMorganBuildingComponent::StartPreview(const FVector& TraceStart, FVector& 
 
 void UMorganBuildingComponent::CompleteBuilding()
 {
-	if(!CurrentBuildingActor->CanBuild()) return;
-	
+	if (!CurrentBuildingActor->CanBuild()) return;
+
 	const APlayerController* PlayerController = GetPlayerController();
-	
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
+		PlayerController->GetLocalPlayer()))
 	{
 		Subsystem->RemoveMappingContext(BuildingMappingContext);
 	}
 	CurrentBuildingActor->Activate();
-	
+
+	if (AMorganPlayerState* PlayerState = PlayerController->GetPlayerState<AMorganPlayerState>())
+	{
+		PlayerState->AddGold(-CurrentItemCost);
+	}
+
 	IsBuildingMode = false;
 	CurrentBuildingActor = nullptr;
 }
@@ -174,4 +182,12 @@ APlayerController* UMorganBuildingComponent::GetPlayerController() const
 	if (!Character) return nullptr;
 
 	return Character->GetController<APlayerController>();
+}
+
+TMap<EBuildingItemType, FBuildingItemData> UMorganBuildingComponent::GetBuildingItems() const
+{
+	AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return TMap<EBuildingItemType, FBuildingItemData>();
+
+	return GameMode->GetBuildingItems();
 }
