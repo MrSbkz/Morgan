@@ -17,7 +17,7 @@ class MORGAN_API UMorganBuildingItemWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void SetItemData(const FBuildingItemData& ItemData) const;
+	void SetItemData(const FBuildingItemData& ItemData);
 	void SetItemType(EBuildingItemType Type);
 
 protected:
@@ -35,5 +35,9 @@ protected:
 private:
 	UFUNCTION()
 	void OnButtonClicked();
+
+	bool CanBuy() const;
+
 	EBuildingItemType ItemType;
+	int32 ItemCost;
 };

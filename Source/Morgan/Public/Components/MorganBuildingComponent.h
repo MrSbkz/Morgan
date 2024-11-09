@@ -38,7 +38,7 @@ protected:
 	float TraceMaxDistance = 1000.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
-	UInputAction* CompleteBuildingAction;
+	TObjectPtr<UInputAction> CompleteBuildingAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> BuildingMappingContext;
@@ -50,11 +50,13 @@ private:
 	void StartPreview(const FVector& TraceStart, FVector& TraceEnd);
 	void CompleteBuilding();
 	APlayerController* GetPlayerController() const;
+	TMap<EBuildingItemType, FBuildingItemData> GetBuildingItems() const;
 	
 
 	bool IsMenuOpened = false;
 	bool IsBuildingMode = false;
 	FTimerHandle BuildingItemTimerHandle;
+	int32 CurrentItemCost = 0;
 
 	TSubclassOf<AMorganBuildingActorBase> CurrentBuildingActorClass;
 

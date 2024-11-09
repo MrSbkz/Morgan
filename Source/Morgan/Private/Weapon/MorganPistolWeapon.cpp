@@ -117,5 +117,6 @@ void AMorganPistolWeapon::OnReloadAnimationFinished(USkeletalMeshComponent* Mesh
 void AMorganPistolWeapon::StartReloading()
 {
 	IsReloadAnimInProgress = true;
+	IsAttackAnimInProgress = false;
 	PlayAnimMontage(ReloadAnimation);
 }

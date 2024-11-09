@@ -7,6 +7,7 @@
 #include "Components/MorganBuildingComponent.h"
 #include "Components/Spacer.h"
 #include "Game/MorganGameMode.h"
+#include "Player/MorganPlayerState.h"
 #include "UI/MorganBuildingItemWidget.h"
 
 void UMorganBuildingMenuWidget::NativeConstruct()
@@ -18,6 +19,30 @@ void UMorganBuildingMenuWidget::NativeConstruct()
 		CloseMenuButton->OnClicked.AddDynamic(this, &UMorganBuildingMenuWidget::OnCloseMenu);
 	}
 
+	InitItems();
+
+	if (AMorganPlayerState* PlayerState = Cast<AMorganPlayerState>(GetOwningPlayerState()))
+	{
+		PlayerState->OnGoldAmountChanged.AddLambda([&](const int32, const int32)
+		{
+			InitItems();
+		});
+	}
+}
+
+void UMorganBuildingMenuWidget::OnCloseMenu()
+{
+	const APawn* Pawn = GetOwningPlayerPawn();
+	if (!Pawn) return;
+
+	if (UMorganBuildingComponent* BuildingComponent = Pawn->FindComponentByClass<UMorganBuildingComponent>())
+	{
+		BuildingComponent->OpenCloseMenu();
+	}
+}
+
+void UMorganBuildingMenuWidget::InitItems() const
+{
 	if (GetWorld())
 	{
 		BuildingItemsHorizontalBox->ClearChildren();
@@ -44,16 +69,5 @@ void UMorganBuildingMenuWidget::NativeConstruct()
 				BuildingItemsHorizontalBox->AddChild(Spacer);
 			}
 		}
-	}
-}
-
-void UMorganBuildingMenuWidget::OnCloseMenu()
-{
-	const APawn* Pawn = GetOwningPlayerPawn();
-	if (!Pawn) return;
-
-	if (UMorganBuildingComponent* BuildingComponent = Pawn->FindComponentByClass<UMorganBuildingComponent>())
-	{
-		BuildingComponent->OpenCloseMenu();
 	}
 }
