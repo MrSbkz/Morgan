@@ -5,6 +5,7 @@
 #include "Animations/MorganReloadFinishedAnimNotify.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 
 void AMorganPistolWeapon::Attack()
 {
@@ -96,6 +97,13 @@ void AMorganPistolWeapon::MakeHit(const FVector& TraceStart, const FVector& Trac
 
 	AActor* DamageActor = Hit.GetActor();
 	if (!DamageActor) return;
+
+	UGameplayStatics::SpawnEmitterAtLocation(
+		GetWorld(),
+		ImpactEffect,
+		Hit.ImpactPoint,
+		Hit.ImpactPoint.Rotation()
+	);
 
 	DamageActor->TakeDamage(
 		DamageAmount,

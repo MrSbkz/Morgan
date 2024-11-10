@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Weapon", meta=(ClampMin="0"))
 	int32 BulletsAmount = 10;
 
+	UPROPERTY(EditDefaultsOnly, Category="FX")
+	TObjectPtr<UParticleSystem> ImpactEffect;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAnimations() override;
