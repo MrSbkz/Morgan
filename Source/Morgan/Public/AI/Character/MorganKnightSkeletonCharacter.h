@@ -6,6 +6,7 @@
 #include "Player/MorganCharacterBase.h"
 #include "MorganKnightSkeletonCharacter.generated.h"
 
+class UBehaviorTree;
 class AMorganChestPickUp;
 class UWidgetComponent;
 
@@ -16,6 +17,9 @@ class MORGAN_API AMorganKnightSkeletonCharacter : public AMorganCharacterBase
 
 public:
 	AMorganKnightSkeletonCharacter();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="AI")
+	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;
 
 protected:
 	virtual void BeginPlay() override;
