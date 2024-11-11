@@ -3,6 +3,7 @@
 #include "AI/Character/MorganKnightSkeletonCharacter.h"
 #include "Components/MorganHealthComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Pickups/MorganChestPickUp.h"
 #include "UI/MorganHealthBarWidget.h"
 
@@ -11,6 +12,13 @@ AMorganKnightSkeletonCharacter::AMorganKnightSkeletonCharacter()
 	HealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("HealthWidgetComponent");
 	HealthWidgetComponent->SetupAttachment(RootComponent);
 	HealthWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+	
+	bUseControllerRotationYaw = false;
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
+	}
 }
 
 void AMorganKnightSkeletonCharacter::BeginPlay()

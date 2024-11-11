@@ -23,10 +23,6 @@ void AMorganSwordWeapon::BeginPlay()
 		SwordCollision->OnComponentBeginOverlap.AddDynamic(this, &AMorganSwordWeapon::OnSwordBeginOverlap);
 		SwordCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
 	}
-
-	FTimerHandle TimerHandle;
-	const float RandomRate = FMath::RandRange(1.0f, 5.0f);
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMorganSwordWeapon::Attack, RandomRate, true);
 }
 
 void AMorganSwordWeapon::InitAnimations()
