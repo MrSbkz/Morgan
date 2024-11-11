@@ -33,8 +33,8 @@ bool UMorganIsTargetCloseDecorator::CalculateRawConditionValue(
 
 	if(Target->IsA<AMorganMainBuilding>())
 	{
-		return Distance < MinDistance + BuildingAcceptanceRadius;
+		return Distance <= MinDistance + BuildingAcceptanceRadius;
 	}
 
-	return Distance < MinDistance;
+	return Distance <= MinDistance;
 }
