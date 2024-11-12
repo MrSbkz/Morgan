@@ -25,5 +25,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI")
 	FBlackboardKeySelector MainBuildingKey;
-
 };

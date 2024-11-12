@@ -1,6 +1,7 @@
 ﻿// Copyrights P.K.
 
 #include "Components/MorganHealthComponent.h"
+#include "AI/Character/MorganKnightSkeletonCharacter.h"
 
 void UMorganHealthComponent::BeginPlay()
 {
@@ -33,5 +34,7 @@ void UMorganHealthComponent::OnTakeDamage(
 	AController* InstigatedBy,
 	AActor* DamageCauser)
 {
+	if (GetOwner()->IsA<AMorganKnightSkeletonCharacter>() == DamageCauser->IsA<AMorganKnightSkeletonCharacter>()) return;
+
 	SetHealth(Health - Damage);
 }
