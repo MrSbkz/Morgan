@@ -46,12 +46,11 @@ protected:
 private:
 	void PreviewBuildingItem();
 
-	void GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
-	void StartPreview(const FVector& TraceStart, FVector& TraceEnd);
+	void GetTraceData(FVector& TraceStart, FVector& TraceEnd, FRotator& ViewRotation) const;
+	void StartPreview(const FVector& TraceStart, FVector& TraceEnd, FRotator& ViewRotation);
 	void CompleteBuilding();
 	APlayerController* GetPlayerController() const;
 	TMap<EBuildingItemType, FBuildingItemData> GetBuildingItems() const;
-	
 
 	bool IsMenuOpened = false;
 	bool IsBuildingMode = false;

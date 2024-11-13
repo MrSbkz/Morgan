@@ -104,14 +104,13 @@ void UMorganBuildingComponent::PreviewBuildingItem()
 	if (!IsBuildingMode) return;
 
 	FVector TraceStart, TraceEnd;
-	GetTraceData(TraceStart, TraceEnd);
-	StartPreview(TraceStart, TraceEnd);
+	FRotator ViewRotation;
+	GetTraceData(TraceStart, TraceEnd, ViewRotation);
+	StartPreview(TraceStart, TraceEnd, ViewRotation);
 }
 
-void UMorganBuildingComponent::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
+void UMorganBuildingComponent::GetTraceData(FVector& TraceStart, FVector& TraceEnd, FRotator& ViewRotation) const
 {
-	FRotator ViewRotation;
-
 	const APlayerController* PlayerController = GetPlayerController();
 	if (!PlayerController) return;
 
@@ -120,7 +119,7 @@ void UMorganBuildingComponent::GetTraceData(FVector& TraceStart, FVector& TraceE
 	TraceEnd = TraceStart + ViewRotation.Vector() * TraceMaxDistance;
 }
 
-void UMorganBuildingComponent::StartPreview(const FVector& TraceStart, FVector& TraceEnd)
+void UMorganBuildingComponent::StartPreview(const FVector& TraceStart, FVector& TraceEnd, FRotator& ViewRotation)
 {
 	if (!GetWorld()) return;
 
@@ -142,14 +141,17 @@ void UMorganBuildingComponent::StartPreview(const FVector& TraceStart, FVector& 
 		TraceEnd = Hit.ImpactPoint;
 	}
 
+	FTransform Transform;
+	FRotator Rotation;
+	Rotation.Yaw += ViewRotation.Yaw + 180.0f;
+	Transform.SetRotation(Rotation.Quaternion());
+	Transform.SetLocation(TraceEnd);
 	if (CurrentBuildingActor)
 	{
-		CurrentBuildingActor->SetActorLocation(TraceEnd);
+		CurrentBuildingActor->SetActorTransform(Transform);
 	}
 	else
 	{
-		FTransform Transform;
-		Transform.SetLocation(TraceEnd);
 		CurrentBuildingActor = GetWorld()->SpawnActor<AMorganBuildingActorBase>(CurrentBuildingActorClass, Transform);
 	}
 }
