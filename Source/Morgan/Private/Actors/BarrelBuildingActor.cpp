@@ -23,6 +23,8 @@ void ABarrelBuildingActor::OnTakeDamage(
 	ExplosionLocation.Z = +100.0f;
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Explosion, GetActorLocation());
+
+	// TODO: Check if damage applies to another barrel
 	UGameplayStatics::ApplyRadialDamage(
 		GetWorld(),
 		ExplosionDamageAmount,
