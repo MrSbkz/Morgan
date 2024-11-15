@@ -25,4 +25,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI")
 	FBlackboardKeySelector MainBuildingKey;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="AI")
+	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;
 };

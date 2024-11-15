@@ -5,8 +5,10 @@
 
 AMorganBuildingActorBase::AMorganBuildingActorBase()
 {
+    RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	SetRootComponent(Mesh);
+	Mesh->SetupAttachment(GetRootComponent());
 
 	Collision = CreateDefaultSubobject<UBoxComponent>("Collision");
 	Collision->SetupAttachment(Mesh);

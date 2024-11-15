@@ -17,7 +17,9 @@ void ABarrelBuildingActor::OnTakeDamage(
 	AController* InstigatedBy,
 	AActor* DamageCauser)
 {
-	if (!IsActive || !InstigatedBy->IsPlayerController()) return;
+	if (!IsActive || !InstigatedBy->IsPlayerController() || IsDamageTaken) return;
+
+	IsDamageTaken = true;
 
 	FVector ExplosionLocation = GetActorLocation();
 	ExplosionLocation.Z = +100.0f;
