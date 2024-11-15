@@ -7,12 +7,14 @@
 ACannonBuildingActor::ACannonBuildingActor()
 {
 	Arrow = CreateDefaultSubobject<UArrowComponent>("Arrow");
-	Arrow->SetupAttachment(GetRootComponent());
+	Arrow->SetupAttachment(Mesh);
+
+	bUseControllerRotationYaw = true;
 }
 
 void ACannonBuildingActor::Attack()
 {
-	if (!GetWorld() || !IsActive) return;
+	if (!GetWorld() || !IsActive || !IsReadyToAttack) return;
 	
 	AMorganCannonball* Cannonball = GetWorld()->SpawnActorDeferred<AMorganCannonball>(CannonballClass, Arrow->GetComponentTransform());
 	if(!Cannonball) return;
@@ -20,12 +22,19 @@ void ACannonBuildingActor::Attack()
 	Cannonball->SetOwner(this);
 	Cannonball->SetShotDirection(Arrow->GetForwardVector());
 	Cannonball->FinishSpawning(Arrow->GetComponentTransform());
+
+	IsReadyToAttack = false;
+
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ACannonBuildingActor::SetReadyToAttack, ReloadTime, false);
 }
 
 void ACannonBuildingActor::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ACannonBuildingActor::Attack, ReloadTime, true);
+void ACannonBuildingActor::SetReadyToAttack()
+{
+	IsReadyToAttack = true;
 }

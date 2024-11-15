@@ -43,6 +43,9 @@ void AMorganCannonball::OnProjectileHit(
 
 	MovementComponent->StopMovementImmediately();
 
+	const APawn* Pawn = Cast<APawn>(GetOwner());
+	if(!Pawn) return;
+
 	UGameplayStatics::ApplyRadialDamage(
 		GetWorld(),
 		DamageAmount,
@@ -51,7 +54,7 @@ void AMorganCannonball::OnProjectileHit(
 		UDamageType::StaticClass(),
 		{GetOwner()},
 		this,
-		GetInstigatorController(),
+		Pawn->GetController(),
 		DoFullDamage);
 
 	Destroy();

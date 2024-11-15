@@ -143,16 +143,17 @@ void UMorganBuildingComponent::StartPreview(const FVector& TraceStart, FVector& 
 
 	FTransform Transform;
 	FRotator Rotation;
-	Rotation.Yaw += ViewRotation.Yaw + 180.0f;
+	Rotation.Yaw += ViewRotation.Yaw;
 	Transform.SetRotation(Rotation.Quaternion());
 	Transform.SetLocation(TraceEnd);
 	if (CurrentBuildingActor)
 	{
-		CurrentBuildingActor->SetActorTransform(Transform);
+		CurrentBuildingActor->SetActorLocation(TraceEnd);
+		CurrentBuildingActor->SetActorRotation(Rotation);
 	}
 	else
 	{
-		CurrentBuildingActor = GetWorld()->SpawnActor<AMorganBuildingActorBase>(CurrentBuildingActorClass, Transform);
+		CurrentBuildingActor = GetWorld()->SpawnActor<AMorganBuildingActorBase>(CurrentBuildingActorClass, TraceEnd, Rotation);
 	}
 }
 

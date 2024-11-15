@@ -31,4 +31,6 @@ private:
 		const UDamageType* DamageType,
 		AController* InstigatedBy,
 		AActor* DamageCauser);
+
+	bool IsDamageTaken = false;
 };

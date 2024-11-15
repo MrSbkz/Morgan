@@ -14,4 +14,5 @@ class MORGAN_API UMorganAIPerceptionComponent : public UAIPerceptionComponent
 
 public:
 	AActor* GetPlayer() const;
+	AActor* GetClosestEnemy() const;
 };

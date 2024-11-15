@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interfaces/EnemyInterface.h"
 #include "Player/MorganCharacterBase.h"
 #include "MorganKnightSkeletonCharacter.generated.h"
 
@@ -11,15 +12,12 @@ class AMorganChestPickUp;
 class UWidgetComponent;
 
 UCLASS()
-class MORGAN_API AMorganKnightSkeletonCharacter : public AMorganCharacterBase
+class MORGAN_API AMorganKnightSkeletonCharacter : public AMorganCharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
 
 public:
 	AMorganKnightSkeletonCharacter();
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="AI")
-	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;
 
 protected:
 	virtual void BeginPlay() override;

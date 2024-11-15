@@ -9,7 +9,7 @@
 class UBoxComponent;
 
 UCLASS()
-class MORGAN_API AMorganBuildingActorBase : public AActor
+class MORGAN_API AMorganBuildingActorBase : public APawn
 {
 	GENERATED_BODY()
 
