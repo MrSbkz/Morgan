@@ -16,7 +16,8 @@ public class Morgan : ModuleRules
 			"InputCore",
 			"EnhancedInput",
 			"UMG",
-			"AIModule"
+			"AIModule",
+			"Niagara",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

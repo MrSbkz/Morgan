@@ -1,6 +1,8 @@
 ﻿// Copyrights P.K.
 
 #include "Weapon/MorganCannonball.h"
+
+#include "NiagaraFunctionLibrary.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -22,7 +24,7 @@ AMorganCannonball::AMorganCannonball()
 void AMorganCannonball::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	check(MovementComponent);
 	check(CollisionComponent);
 
@@ -44,7 +46,7 @@ void AMorganCannonball::OnProjectileHit(
 	MovementComponent->StopMovementImmediately();
 
 	const APawn* Pawn = Cast<APawn>(GetOwner());
-	if(!Pawn) return;
+	if (!Pawn) return;
 
 	UGameplayStatics::ApplyRadialDamage(
 		GetWorld(),
@@ -56,6 +58,12 @@ void AMorganCannonball::OnProjectileHit(
 		this,
 		Pawn->GetController(),
 		DoFullDamage);
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+		GetWorld(),
+		ExplosionFX,
+		Hit.ImpactPoint,
+		Hit.ImpactNormal.Rotation());
 
 	Destroy();
 }

@@ -8,6 +8,8 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnBulletsUpdatedSignature, const int32);
 
+class UNiagaraSystem;
+
 UCLASS()
 class MORGAN_API AMorganPistolWeapon : public AMorganWeaponBase
 {
@@ -29,8 +31,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Weapon", meta=(ClampMin="0"))
 	int32 BulletsAmount = 10;
 
-	UPROPERTY(EditDefaultsOnly, Category="FX")
+	UPROPERTY(EditDefaultsOnly, Category="VFX")
 	TObjectPtr<UParticleSystem> ImpactEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category="VFX")
+	TObjectPtr<UNiagaraSystem> MuzzleFX;
+
+	UPROPERTY(EditDefaultsOnly, Category="VFX")
+	FName MuzzleSocketName = "MuzzleSocket";
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,6 +51,7 @@ private:
 	void MakeHit(const FVector& TraceStart, const FVector& TraceEnd) const;
 	void OnReloadAnimationFinished(USkeletalMeshComponent* MeshComp);
 	void StartReloading();
+	void SpawnMuzzleFX() const;
 
 	int32 BulletsLeft;
 	bool IsReloadAnimInProgress;
