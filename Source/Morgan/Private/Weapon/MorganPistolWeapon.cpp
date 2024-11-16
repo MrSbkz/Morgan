@@ -6,11 +6,13 @@
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
 
 void AMorganPistolWeapon::Attack()
 {
 	if (IsAttackAnimInProgress || IsReloadAnimInProgress) return;
 	MakeShot();
+	SpawnMuzzleFX();
 	--BulletsLeft;
 	OnBulletsUpdated.Broadcast(BulletsLeft);
 	Super::Attack();
@@ -127,4 +129,16 @@ void AMorganPistolWeapon::StartReloading()
 	IsReloadAnimInProgress = true;
 	IsAttackAnimInProgress = false;
 	PlayAnimMontage(ReloadAnimation);
+}
+
+void AMorganPistolWeapon::SpawnMuzzleFX() const
+{
+	UNiagaraFunctionLibrary::SpawnSystemAttached(
+		MuzzleFX,
+		Mesh,
+		MuzzleSocketName,
+		FVector::ZeroVector,
+		FRotator::ZeroRotator,
+		EAttachLocation::SnapToTarget,
+		true);
 }

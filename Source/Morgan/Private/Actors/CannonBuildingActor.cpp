@@ -1,6 +1,8 @@
 ﻿// Copyrights P.K.
 
 #include "Actors/CannonBuildingActor.h"
+
+#include "NiagaraFunctionLibrary.h"
 #include "Components/ArrowComponent.h"
 #include "Weapon/MorganCannonball.h"
 
@@ -22,6 +24,15 @@ void ACannonBuildingActor::Attack()
 	Cannonball->SetOwner(this);
 	Cannonball->SetShotDirection(Arrow->GetForwardVector());
 	Cannonball->FinishSpawning(Arrow->GetComponentTransform());
+	
+	UNiagaraFunctionLibrary::SpawnSystemAttached(
+		MuzzleFX,
+		Mesh,
+		MuzzleSocketName,
+		FVector::ZeroVector,
+		FRotator::ZeroRotator,
+		EAttachLocation::SnapToTarget,
+		true);
 
 	IsReadyToAttack = false;
 

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MorganCannonball.generated.h"
 
+class UNiagaraSystem;
 class UProjectileMovementComponent;
 class USphereComponent;
 
@@ -22,10 +23,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, Category="Weapon")
-	USphereComponent* CollisionComponent;
+	TObjectPtr<USphereComponent> CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category="Weapon")
-	UProjectileMovementComponent* MovementComponent;
+	TObjectPtr<UProjectileMovementComponent> MovementComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	float DamageRadius = 50.0f;
@@ -38,6 +39,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	float LifeTime = 5.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category="VFX")
+	TObjectPtr<UNiagaraSystem> ExplosionFX;
 
 private:
 	UFUNCTION()
