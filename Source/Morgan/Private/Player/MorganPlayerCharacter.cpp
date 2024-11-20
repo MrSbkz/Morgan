@@ -3,7 +3,10 @@
 #include "Player/MorganPlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/MorganBuildingComponent.h"
+#include "Components/MorganRespawnComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Player/MorganPlayerState.h"
+#include "UI/MorganHUD.h"
 
 AMorganPlayerCharacter::AMorganPlayerCharacter()
 {
@@ -16,6 +19,21 @@ AMorganPlayerCharacter::AMorganPlayerCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	BuildingComponent = CreateDefaultSubobject<UMorganBuildingComponent>("BuildingComponent");
+	RespawnComponent = CreateDefaultSubobject<UMorganRespawnComponent>("RespawnComponent");
+}
+
+void AMorganPlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		if (const AMorganHUD* MorganHUD = Cast<AMorganHUD>(PlayerController->GetHUD()))
+		{
+			MorganHUD->BindToHealthComponent(HealthComponent);
+			MorganHUD->BindToWeaponComponent(WeaponComponent);
+		}
+	}
 }
 
 void AMorganPlayerCharacter::OnDeath()
@@ -25,5 +43,25 @@ void AMorganPlayerCharacter::OnDeath()
 	if (DeathAnimMontage)
 	{
 		PlayAnimMontage(DeathAnimMontage);
+	}
+
+	if (RespawnComponent)
+	{
+		RespawnComponent->Respawn();
+	}
+
+	if(BuildingComponent)
+	{
+		BuildingComponent->ClearBuildingData();
+	}
+
+	if(AMorganPlayerState* MorganPlayerState = Cast<AMorganPlayerState>(GetPlayerState()))
+	{
+		MorganPlayerState->IncreaseDeathsCount();
+	}
+
+	if (Controller)
+	{
+		Controller->ChangeState(NAME_Spectating);
 	}
 }

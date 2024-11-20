@@ -28,6 +28,7 @@ protected:
 
 private:
 	void SetHealth(float NewHealth);
+	float GetHealthPercent() const { return Health / MaxHealth; }
 
 	UFUNCTION()
 	void OnTakeDamage(

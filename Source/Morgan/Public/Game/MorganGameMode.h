@@ -14,10 +14,18 @@ class MORGAN_API AMorganGameMode : public AGameModeBase
 
 public:
 	AMorganGameMode();
+	void RespawnRequest(const int32 RespawnTime);
 
 	TMap<EBuildingItemType, FBuildingItemData> GetBuildingItems() { return BuildingItems; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category="Building")
 	TMap<EBuildingItemType, FBuildingItemData> BuildingItems;
+
+private:
+	void RespawnTimerUpdate();
+	void RespawnPlayer(AController* Controller);
+	
+	FTimerHandle RespawnTimerHandle;
+	int32 RespawnCountDown = 0;
 };

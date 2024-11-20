@@ -6,6 +6,7 @@
 #include "Player/MorganCharacterBase.h"
 #include "MorganPlayerCharacter.generated.h"
 
+class UMorganRespawnComponent;
 class UMorganBuildingComponent;
 struct FInputActionValue;
 class UMorganInputDataConfig;
@@ -22,6 +23,7 @@ public:
 	AMorganPlayerCharacter();
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void OnDeath() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
@@ -32,6 +34,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	TObjectPtr<UMorganBuildingComponent> BuildingComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
+	TObjectPtr<UMorganRespawnComponent> RespawnComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathAnimMontage;

@@ -19,7 +19,7 @@ void UMorganHealthComponent::SetHealth(const float NewHealth)
 {
 	Health = NewHealth;
 
-	OnHealthChanged.Broadcast(Health / MaxHealth);
+	OnHealthChanged.Broadcast(GetHealthPercent());
 
 	if (Health <= 0.0f)
 	{

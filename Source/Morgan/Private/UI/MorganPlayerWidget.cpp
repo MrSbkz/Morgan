@@ -22,3 +22,22 @@ void UMorganPlayerWidget::NativeConstruct()
 		}
 	}
 }
+
+void UMorganPlayerWidget::BindToHealthComponent(UMorganHealthComponent* HealthComponent) const
+{
+	if (!HealthComponent)
+	{
+		return;
+	}
+
+	HealthComponent->OnHealthChanged.Clear();
+
+	HealthComponent->OnHealthChanged.AddLambda([this](const float HealthPercent)
+	{
+		if (HealthBar)
+		{
+			HealthBar->SetHealth(HealthPercent);
+		}
+	});
+	HealthBar->SetHealth(1.0f);
+}

@@ -5,26 +5,17 @@
 #include "Components/TextBlock.h"
 #include "Weapon/MorganPistolWeapon.h"
 
-void UMorganWeaponDataWidget::NativeConstruct()
+void UMorganWeaponDataWidget::BindToWeaponComponent(const UMorganWeaponComponent* WeaponComponent) const
 {
-	Super::NativeConstruct();
-
-	if (const APawn* Pawn = GetOwningPlayerPawn())
+	if (!WeaponComponent) return;
+	
+	if (AMorganPistolWeapon* PistolWeapon = Cast<AMorganPistolWeapon>(WeaponComponent->GetWeapon()))
 	{
-		if (UMorganWeaponComponent* WeaponComponent = Pawn->FindComponentByClass<UMorganWeaponComponent>())
+		BulletsLeftText->SetText(FText::FromString(FString::FromInt(PistolWeapon->GetBulletsAmount())));
+		BulletsAmountText->SetText(FText::FromString(FString::FromInt(PistolWeapon->GetBulletsAmount())));
+		PistolWeapon->OnBulletsUpdated.AddLambda([this](const int32 BulletsLeft)
 		{
-			WeaponComponent->OnWeaponSpawned.AddLambda([this](AMorganWeaponBase* Weapon)
-			{
-				if (AMorganPistolWeapon* PistolWeapon = Cast<AMorganPistolWeapon>(Weapon))
-				{
-					BulletsLeftText->SetText(FText::FromString(FString::FromInt(PistolWeapon->GetBulletsAmount())));
-					BulletsAmountText->SetText(FText::FromString(FString::FromInt(PistolWeapon->GetBulletsAmount())));
-					PistolWeapon->OnBulletsUpdated.AddLambda([this](const int32 BulletsLeft)
-					{
-						BulletsLeftText->SetText(FText::FromString(FString::FromInt(BulletsLeft)));
-					});
-				}
-			});
-		}
+			BulletsLeftText->SetText(FText::FromString(FString::FromInt(BulletsLeft)));
+		});
 	}
 }

@@ -17,8 +17,12 @@ public:
 	int32 GetGoldAmount() const { return GoldAmount; }
 	void AddGold(const int32 Gold);
 
+	int32 GetDeathsCount() const { return DeathsCount; }
+	void IncreaseDeathsCount() { ++DeathsCount; }
+
 	FOnGoldAmountChagedSignature OnGoldAmountChanged;
 
 private:
 	int32 GoldAmount = 0;
+	int32 DeathsCount = 0;
 };
