@@ -6,10 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "MorganWeaponComponent.generated.h"
 
-class AMorganPistolWeapon;
 class AMorganWeaponBase;
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponSpawnedSignature, AMorganWeaponBase*);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class MORGAN_API UMorganWeaponComponent : public UActorComponent
@@ -21,8 +18,6 @@ public:
 	void Reload() const;
 	void DestroyWeapon() const;
 	AMorganWeaponBase* GetWeapon() const { return Weapon; }
-
-	FOnWeaponSpawnedSignature OnWeaponSpawned;
 
 protected:
 	virtual void BeginPlay() override;

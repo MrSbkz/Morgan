@@ -18,8 +18,6 @@ public:
 	void BindToWeaponComponent(const UMorganWeaponComponent* WeaponComponent) const;
 
 protected:
-	virtual void NativeConstruct() override;
-
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UTextBlock> BulletsLeftText;
 
