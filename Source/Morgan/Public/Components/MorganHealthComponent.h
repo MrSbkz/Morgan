@@ -16,6 +16,7 @@ class MORGAN_API UMorganHealthComponent : public UActorComponent
 
 public:
 	bool IsDead() const { return Health <= 0.0f; }
+	float GetHealthPercent() const { return Health / MaxHealth; }
 
 	FOnDeathSignature OnDeath;
 	FOnHealthChangedSignature OnHealthChanged;

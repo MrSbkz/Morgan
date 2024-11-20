@@ -4,8 +4,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Components/MorganBuildingComponent.h"
+#include "Components/MorganHealthComponent.h"
 #include "Components/MorganWeaponComponent.h"
 #include "Input/MorganInputDataConfig.h"
+#include "UI/MorganHUD.h"
 
 void AMorganPlayerController::BeginPlay()
 {
@@ -45,6 +47,17 @@ void AMorganPlayerController::SetupInputComponent()
 			this,
 			&AMorganPlayerController::OpenBuildingMenu
 		);
+	}
+}
+
+void AMorganPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	if(const AMorganHUD* MorganHUD = Cast<AMorganHUD>(GetHUD()))
+	{
+		MorganHUD->BindToHealthComponent(InPawn->FindComponentByClass<UMorganHealthComponent>());
+		MorganHUD->BindToWeaponComponent(InPawn->FindComponentByClass<UMorganWeaponComponent>());
 	}
 }
 

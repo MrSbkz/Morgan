@@ -12,8 +12,6 @@ class UInputAction;
 class AMorganBuildingActorBase;
 class UInputMappingContext;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnMenuOpenedSignature, const bool)
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class MORGAN_API UMorganBuildingComponent : public UActorComponent
 {
@@ -23,8 +21,7 @@ public:
 	UMorganBuildingComponent();
 	void OpenCloseMenu();
 	void StartBuilding(EBuildingItemType BuildingItemType);
-
-	FOnMenuOpenedSignature OnMenuOpened;
+	void ClearBuildingData();
 
 protected:
 	virtual void BeginPlay() override;
@@ -60,5 +57,5 @@ private:
 	TSubclassOf<AMorganBuildingActorBase> CurrentBuildingActorClass;
 
 	UPROPERTY()
-	TObjectPtr<AMorganBuildingActorBase> CurrentBuildingActor;
+	AMorganBuildingActorBase* CurrentBuildingActor;
 };

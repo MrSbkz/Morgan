@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "MorganWeaponComponent.generated.h"
 
+class AMorganPistolWeapon;
 class AMorganWeaponBase;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponSpawnedSignature, AMorganWeaponBase*);
@@ -19,7 +20,8 @@ public:
 	void Attack() const;
 	void Reload() const;
 	void DestroyWeapon() const;
-	
+	AMorganWeaponBase* GetWeapon() const { return Weapon; }
+
 	FOnWeaponSpawnedSignature OnWeaponSpawned;
 
 protected:

@@ -7,6 +7,7 @@
 #include "UI/MorganHUD.h"
 #include "Engine/World.h"
 #include "Game/MorganGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/MorganPlayerState.h"
 
 UMorganBuildingComponent::UMorganBuildingComponent()
@@ -74,6 +75,26 @@ void UMorganBuildingComponent::StartBuilding(const EBuildingItemType BuildingIte
 	CurrentItemCost = BuildingItems[BuildingItemType].ItemCost;
 
 	IsBuildingMode = true;
+}
+
+void UMorganBuildingComponent::ClearBuildingData()
+{
+	APlayerController* PlayerController = GetPlayerController();
+	if (!PlayerController) return;
+
+	const AMorganHUD* GameHUD = Cast<AMorganHUD>(PlayerController->GetHUD());
+	if (!GameHUD) return;
+	
+	GameHUD->OpenClosedBuildingMenu(false);
+	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->SetShowMouseCursor(false);
+
+	if (CurrentBuildingActor)
+	{
+		CurrentBuildingActor->Destroy();
+		CurrentBuildingActor = nullptr;
+	}
+	IsBuildingMode = false;
 }
 
 void UMorganBuildingComponent::BeginPlay()
@@ -153,7 +174,8 @@ void UMorganBuildingComponent::StartPreview(const FVector& TraceStart, FVector& 
 	}
 	else
 	{
-		CurrentBuildingActor = GetWorld()->SpawnActor<AMorganBuildingActorBase>(CurrentBuildingActorClass, TraceEnd, Rotation);
+		CurrentBuildingActor = GetWorld()->SpawnActor<AMorganBuildingActorBase>(
+			CurrentBuildingActorClass, TraceEnd, Rotation);
 	}
 }
 
@@ -181,10 +203,7 @@ void UMorganBuildingComponent::CompleteBuilding()
 
 APlayerController* UMorganBuildingComponent::GetPlayerController() const
 {
-	const APawn* Character = Cast<APawn>(GetOwner());
-	if (!Character) return nullptr;
-
-	return Character->GetController<APlayerController>();
+	return UGameplayStatics::GetPlayerController(GetWorld(), 0);
 }
 
 TMap<EBuildingItemType, FBuildingItemData> UMorganBuildingComponent::GetBuildingItems() const

@@ -1,7 +1,6 @@
 // Copyrights P.K.
 
 #include "Player/MorganCharacterBase.h"
-
 #include "Components/CapsuleComponent.h"
 #include "Components/MorganHealthComponent.h"
 #include "Components/MorganWeaponComponent.h"
