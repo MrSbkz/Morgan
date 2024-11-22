@@ -26,3 +26,10 @@ struct FBuildingItemData
 	UPROPERTY(EditDefaultsOnly, Category="Building")
 	TSubclassOf<AMorganBuildingActorBase> BuildingItemClass;
 };
+
+UENUM()
+enum class EGameState : uint8
+{
+	Pause,
+	InProgress
+};

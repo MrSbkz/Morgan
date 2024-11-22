@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MorganCoreTypes.h"
 #include "GameFramework/PlayerController.h"
 #include "MorganPlayerController.generated.h"
 
@@ -28,9 +29,11 @@ protected:
 	TObjectPtr<UMorganInputDataConfig> InputDataConfig;
 
 private:
+	void OnGameStateChanged(EGameState GameState);
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Attack();
 	void Reload();
 	void OpenBuildingMenu();
+	void SetPause();
 };

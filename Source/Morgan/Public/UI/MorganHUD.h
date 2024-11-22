@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MorganCoreTypes.h"
 #include "GameFramework/HUD.h"
 #include "MorganHUD.generated.h"
 
@@ -36,11 +37,20 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="UI")
 	TSubclassOf<UUserWidget> WeaponDataWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget> PauseWidgetClass;
+
 private:
 	void InitWidgets();
+
 	UUserWidget* InitOneWidget(
 		const TSubclassOf<UUserWidget>& WidgetClass,
 		ESlateVisibility InVisibility) const;
+
+	void OnGameStateChanged(EGameState GameState);
+
+	UPROPERTY()
+	TMap<EGameState, UUserWidget*> GameWidgets;
 
 	UPROPERTY()
 	UUserWidget* PlayerWidget;
@@ -53,4 +63,10 @@ private:
 
 	UPROPERTY()
 	UUserWidget* WeaponDataWidget;
+
+	UPROPERTY()
+	UUserWidget* PauseWidget;
+
+	UPROPERTY()
+	UUserWidget* CurrentActiveWidget;
 };
