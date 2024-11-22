@@ -6,6 +6,7 @@
 #include "Components/MorganBuildingComponent.h"
 #include "Components/MorganHealthComponent.h"
 #include "Components/MorganWeaponComponent.h"
+#include "Game/MorganGameMode.h"
 #include "Input/MorganInputDataConfig.h"
 #include "UI/MorganHUD.h"
 
@@ -15,6 +16,14 @@ void AMorganPlayerController::BeginPlay()
 
 	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = false;
+
+	if(GetWorld() && GetWorld()->GetAuthGameMode())
+	{
+		if(AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode()))
+		{
+			GameMode->OnGameStateChanged.AddUObject(this, &AMorganPlayerController::OnGameStateChanged);
+		}
+	}
 }
 
 void AMorganPlayerController::SetupInputComponent()
@@ -47,6 +56,7 @@ void AMorganPlayerController::SetupInputComponent()
 			this,
 			&AMorganPlayerController::OpenBuildingMenu
 		);
+		Input->BindAction(InputDataConfig->Pause, ETriggerEvent::Started, this, &AMorganPlayerController::SetPause);
 	}
 }
 
@@ -58,6 +68,20 @@ void AMorganPlayerController::OnPossess(APawn* InPawn)
 	{
 		MorganHUD->BindToHealthComponent(InPawn->FindComponentByClass<UMorganHealthComponent>());
 		MorganHUD->BindToWeaponComponent(InPawn->FindComponentByClass<UMorganWeaponComponent>());
+	}
+}
+
+void AMorganPlayerController::OnGameStateChanged(EGameState GameState)
+{
+	if(GameState == EGameState::Pause)
+	{
+		SetInputMode(FInputModeUIOnly());
+		bShowMouseCursor = true;
+	}
+	else
+	{
+		SetInputMode(FInputModeGameOnly());
+		bShowMouseCursor = false;
 	}
 }
 
@@ -115,4 +139,11 @@ void AMorganPlayerController::OpenBuildingMenu()
 	{
 		BuildingComponent->OpenCloseMenu();
 	}
+}
+
+void AMorganPlayerController::SetPause()
+{
+	if(!GetWorld() || ! GetWorld()->GetAuthGameMode()) return;
+	
+	GetWorld()->GetAuthGameMode()->SetPause(this);
 }

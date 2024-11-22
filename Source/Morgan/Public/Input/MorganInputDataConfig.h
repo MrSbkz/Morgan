@@ -29,4 +29,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* OpenBuildingMenu;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* Pause;
 };

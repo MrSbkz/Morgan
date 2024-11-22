@@ -26,6 +26,30 @@ void AMorganGameMode::RespawnRequest(const int32 RespawnTime)
 		true);
 }
 
+bool AMorganGameMode::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+	const bool PauseSet = Super::SetPause(PC, CanUnpauseDelegate);
+
+	if(PauseSet)
+	{
+		OnGameStateChanged.Broadcast(EGameState::Pause);
+	}
+
+	return PauseSet;
+}
+
+bool AMorganGameMode::ClearPause()
+{
+	const bool IsUnpaused = Super::ClearPause();
+
+	if(IsUnpaused)
+	{
+		OnGameStateChanged.Broadcast(EGameState::InProgress);
+	}
+
+	return IsUnpaused;
+}
+
 void AMorganGameMode::RespawnTimerUpdate()
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);

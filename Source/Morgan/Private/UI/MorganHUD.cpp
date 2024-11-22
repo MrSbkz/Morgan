@@ -2,6 +2,7 @@
 
 #include "UI/MorganHUD.h"
 #include "Blueprint/UserWidget.h"
+#include "Game/MorganGameMode.h"
 #include "UI/MorganPlayerWidget.h"
 #include "UI/MorganSpectatorWidget.h"
 #include "UI/MorganWeaponDataWidget.h"
@@ -62,6 +63,18 @@ void AMorganHUD::BeginPlay()
 	Super::BeginPlay();
 
 	InitWidgets();
+
+	GameWidgets.Add(EGameState::Pause, PauseWidget);
+	GameWidgets.Add(EGameState::InProgress, PlayerWidget);
+
+	if(GetWorld())
+	{
+		if(AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode()))
+		{
+			GameMode->OnGameStateChanged.AddUObject(this, &AMorganHUD::OnGameStateChanged);
+		}
+	}
+	CurrentActiveWidget = PlayerWidget;
 }
 
 void AMorganHUD::InitWidgets()
@@ -70,6 +83,7 @@ void AMorganHUD::InitWidgets()
 	BuildingWidget = InitOneWidget(BuildingWidgetClass, ESlateVisibility::Hidden);
 	SpectatorWidget = InitOneWidget(SpectatorWidgetClass, ESlateVisibility::Hidden);
 	WeaponDataWidget = InitOneWidget(WeaponDataWidgetClass, ESlateVisibility::HitTestInvisible);
+	PauseWidget = InitOneWidget(PauseWidgetClass, ESlateVisibility::Hidden);
 }
 
 UUserWidget* AMorganHUD::InitOneWidget(
@@ -86,4 +100,15 @@ UUserWidget* AMorganHUD::InitOneWidget(
 	}
 
 	return Widget;
+}
+
+void AMorganHUD::OnGameStateChanged(EGameState GameState)
+{
+	CurrentActiveWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	if(GameWidgets.Contains(GameState))
+	{
+		CurrentActiveWidget = GameWidgets[GameState];
+		CurrentActiveWidget->SetVisibility(ESlateVisibility::Visible);		
+	}
 }
