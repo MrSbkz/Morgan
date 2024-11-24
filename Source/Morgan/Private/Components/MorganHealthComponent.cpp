@@ -3,11 +3,26 @@
 #include "Components/MorganHealthComponent.h"
 #include "AI/Character/MorganKnightSkeletonCharacter.h"
 
+void UMorganHealthComponent::SetHealthLevel(const int32 Level)
+{
+	const float HealthToAdd = InitialMaxHealth + IncreasedHealth * (Level - 1) - MaxHealth;
+	
+	MaxHealth += HealthToAdd;
+	Health += HealthToAdd;
+	SetHealth(Health);
+	
+	UE_LOG(LogTemp, Error, TEXT("Owner: %s, Level: %i, Health: %f"),
+		*GetOwner()->GetClass()->GetName(),
+		Level,
+		Health);
+}
+
 void UMorganHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetHealth(MaxHealth);
+	MaxHealth = InitialMaxHealth;
+	SetHealth(InitialMaxHealth);
 
 	if (AActor* Owner = GetOwner())
 	{

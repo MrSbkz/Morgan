@@ -17,6 +17,7 @@ public:
 	void Attack() const;
 	void Reload() const;
 	void DestroyWeapon() const;
+	void SetWeaponLevel(int32 Level) const;
 	AMorganWeaponBase* GetWeapon() const { return Weapon; }
 
 protected:

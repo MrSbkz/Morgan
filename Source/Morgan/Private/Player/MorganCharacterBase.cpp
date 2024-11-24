@@ -16,6 +16,7 @@ void AMorganCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(WeaponComponent);
 	check(HealthComponent);
 
 	HealthComponent->OnDeath.AddUObject(this, &AMorganCharacterBase::OnDeath);
