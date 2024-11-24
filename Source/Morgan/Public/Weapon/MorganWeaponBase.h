@@ -14,6 +14,7 @@ class MORGAN_API AMorganWeaponBase : public AActor
 public:
 	AMorganWeaponBase();
 	virtual void Attack();
+	virtual void SetLevel(int32 Level);
 
 	virtual void Reload()
 	{
@@ -38,10 +39,15 @@ protected:
 	TObjectPtr<UAnimMontage> AttackAnimation;
 
 	UPROPERTY(EditDefaultsOnly, Category="Weapon", meta=(ClampMin="0.0"))
-	float DamageAmount;
+	float InitialDamageAmount = 30.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category="Weapon", meta=(ClampMin="0.0"))
+	float IncreasedDamageAmount = 20.0f;
 
 	bool IsAttackAnimInProgress;
+	float DamageAmount;
 
 private:
 	void OnAttackAnimationFinished(USkeletalMeshComponent* MeshComp);
+
 };

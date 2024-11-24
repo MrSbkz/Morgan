@@ -2,6 +2,7 @@
 
 #include "AI/Character/MorganKnightSkeletonCharacter.h"
 #include "Components/MorganHealthComponent.h"
+#include "Components/MorganWeaponComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Pickups/MorganChestPickUp.h"
@@ -27,6 +28,9 @@ void AMorganKnightSkeletonCharacter::BeginPlay()
 
 	HealthWidgetComponent->SetVisibility(false);
 	HealthComponent->OnHealthChanged.AddUObject(this, &AMorganKnightSkeletonCharacter::OnHealthChanged);
+
+	WeaponComponent->SetWeaponLevel(Level);
+	HealthComponent->SetHealthLevel(Level);
 }
 
 void AMorganKnightSkeletonCharacter::OnDeath()

@@ -8,6 +8,7 @@
 #include "Components/MorganWeaponComponent.h"
 #include "Game/MorganGameMode.h"
 #include "Input/MorganInputDataConfig.h"
+#include "Player/MorganPlayerState.h"
 #include "UI/MorganHUD.h"
 
 void AMorganPlayerController::BeginPlay()
@@ -17,9 +18,9 @@ void AMorganPlayerController::BeginPlay()
 	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = false;
 
-	if(GetWorld() && GetWorld()->GetAuthGameMode())
+	if (GetWorld() && GetWorld()->GetAuthGameMode())
 	{
-		if(AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode()))
+		if (AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode()))
 		{
 			GameMode->OnGameStateChanged.AddUObject(this, &AMorganPlayerController::OnGameStateChanged);
 		}
@@ -64,16 +65,30 @@ void AMorganPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	if(const AMorganHUD* MorganHUD = Cast<AMorganHUD>(GetHUD()))
+	if (const AMorganHUD* MorganHUD = Cast<AMorganHUD>(GetHUD()))
 	{
-		MorganHUD->BindToHealthComponent(InPawn->FindComponentByClass<UMorganHealthComponent>());
-		MorganHUD->BindToWeaponComponent(InPawn->FindComponentByClass<UMorganWeaponComponent>());
+		UMorganWeaponComponent* WeaponComponent = InPawn->FindComponentByClass<UMorganWeaponComponent>();
+		UMorganHealthComponent* HealthComponent = InPawn->FindComponentByClass<UMorganHealthComponent>();
+		if (const AMorganPlayerState* MorganPlayerState = Cast<AMorganPlayerState>(PlayerState))
+		{
+			if (WeaponComponent)
+			{
+				MorganHUD->BindToWeaponComponent(WeaponComponent);
+				WeaponComponent->SetWeaponLevel(MorganPlayerState->GetWeaponLevel());
+			}
+
+			if (HealthComponent)
+			{
+				MorganHUD->BindToHealthComponent(HealthComponent);
+				HealthComponent->SetHealthLevel(MorganPlayerState->GetHealthLevel());
+			}
+		}
 	}
 }
 
 void AMorganPlayerController::OnGameStateChanged(EGameState GameState)
 {
-	if(GameState == EGameState::Pause)
+	if (GameState == EGameState::Pause)
 	{
 		SetInputMode(FInputModeUIOnly());
 		bShowMouseCursor = true;
@@ -143,7 +158,7 @@ void AMorganPlayerController::OpenBuildingMenu()
 
 void AMorganPlayerController::SetPause()
 {
-	if(!GetWorld() || ! GetWorld()->GetAuthGameMode()) return;
-	
+	if (!GetWorld() || !GetWorld()->GetAuthGameMode()) return;
+
 	GetWorld()->GetAuthGameMode()->SetPause(this);
 }

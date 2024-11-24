@@ -24,6 +24,14 @@ void UMorganWeaponComponent::DestroyWeapon() const
 	}
 }
 
+void UMorganWeaponComponent::SetWeaponLevel(const int32 Level) const
+{
+	if (Weapon)
+	{
+		Weapon->SetLevel(Level);
+	}
+}
+
 void UMorganWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();

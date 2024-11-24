@@ -3,7 +3,9 @@
 #include "Player/MorganPlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/MorganBuildingComponent.h"
+#include "Components/MorganHealthComponent.h"
 #include "Components/MorganRespawnComponent.h"
+#include "Components/MorganWeaponComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Player/MorganPlayerState.h"
 #include "UI/MorganHUD.h"
@@ -34,6 +36,12 @@ void AMorganPlayerCharacter::BeginPlay()
 			MorganHUD->BindToWeaponComponent(WeaponComponent);
 		}
 	}
+
+	if (const AMorganPlayerState* MorganPlayerState = Cast<AMorganPlayerState>(GetPlayerState()))
+	{
+		WeaponComponent->SetWeaponLevel(MorganPlayerState->GetWeaponLevel());
+		HealthComponent->SetHealthLevel(MorganPlayerState->GetHealthLevel());
+	}
 }
 
 void AMorganPlayerCharacter::OnDeath()
@@ -50,12 +58,12 @@ void AMorganPlayerCharacter::OnDeath()
 		RespawnComponent->Respawn();
 	}
 
-	if(BuildingComponent)
+	if (BuildingComponent)
 	{
 		BuildingComponent->ClearBuildingData();
 	}
 
-	if(AMorganPlayerState* MorganPlayerState = Cast<AMorganPlayerState>(GetPlayerState()))
+	if (AMorganPlayerState* MorganPlayerState = Cast<AMorganPlayerState>(GetPlayerState()))
 	{
 		MorganPlayerState->IncreaseDeathsCount();
 	}

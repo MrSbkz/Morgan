@@ -16,6 +16,7 @@ class MORGAN_API UMorganHealthComponent : public UActorComponent
 
 public:
 	bool IsDead() const { return Health <= 0.0f; }
+	void SetHealthLevel(const int32 Level);
 
 	FOnDeathSignature OnDeath;
 	FOnHealthChangedSignature OnHealthChanged;
@@ -24,7 +25,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health", meta=(ClampMin="1.0", ClampMax="1000.0"))
-	float MaxHealth = 100.0f;
+	float InitialMaxHealth = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health", meta=(ClampMin="1.0", ClampMax="100.0"))
+	float IncreasedHealth = 50.0f;
 
 private:
 	void SetHealth(float NewHealth);
@@ -39,4 +43,5 @@ private:
 		AActor* DamageCauser);
 
 	float Health = 100.0f;
+	float MaxHealth;
 };
