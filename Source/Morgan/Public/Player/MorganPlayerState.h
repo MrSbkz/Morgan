@@ -6,7 +6,7 @@
 #include "GameFramework/PlayerState.h"
 #include "MorganPlayerState.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnGoldAmountChagedSignature, const int32, const int32);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnGoldAmountChagedSignature, const int32 GoldAmount, const int32 GoldDelta);
 
 UCLASS()
 class MORGAN_API AMorganPlayerState : public APlayerState

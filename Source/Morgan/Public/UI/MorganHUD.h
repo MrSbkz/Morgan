@@ -20,7 +20,8 @@ public:
 	void OpenClosedBuildingMenu(const bool IsOpened) const;
 	void BindToHealthComponent(UMorganHealthComponent* HealthComponent) const;
 	void BindToWeaponComponent(UMorganWeaponComponent* WeaponComponent) const;
-	auto UpdateRespawnTimer(const int32 RespawnTime) const -> void;
+	void UpdateRespawnTimer(const int32 RespawnTime) const;
+	void OpenImprovementsMenu();
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,6 +40,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="UI")
 	TSubclassOf<UUserWidget> PauseWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget> ImprovementsWidgetClass;
 
 private:
 	void InitWidgets();
@@ -68,5 +72,10 @@ private:
 	UUserWidget* PauseWidget;
 
 	UPROPERTY()
+	UUserWidget* ImprovementsWidget;
+
+	UPROPERTY()
 	UUserWidget* CurrentActiveWidget;
+
+	bool IsImprovementsMenuOpened = false;
 };

@@ -32,4 +32,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* Pause;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* OpenImprovementsMenu;
 };

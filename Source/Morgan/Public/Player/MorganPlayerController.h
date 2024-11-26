@@ -36,4 +36,5 @@ private:
 	void Reload();
 	void OpenBuildingMenu();
 	void SetPause();
+	void OpenImprovementsMenu();
 };

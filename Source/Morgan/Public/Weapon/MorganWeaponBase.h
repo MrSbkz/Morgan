@@ -14,11 +14,13 @@ class MORGAN_API AMorganWeaponBase : public AActor
 public:
 	AMorganWeaponBase();
 	virtual void Attack();
-	virtual void SetLevel(int32 Level);
+	void SetLevel(int32 Level);
 
 	virtual void Reload()
 	{
 	};
+
+	int32 GetDamageAmount() const { return DamageAmount; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -49,5 +51,4 @@ protected:
 
 private:
 	void OnAttackAnimationFinished(USkeletalMeshComponent* MeshComp);
-
 };
