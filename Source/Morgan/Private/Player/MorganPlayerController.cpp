@@ -58,6 +58,7 @@ void AMorganPlayerController::SetupInputComponent()
 			&AMorganPlayerController::OpenBuildingMenu
 		);
 		Input->BindAction(InputDataConfig->Pause, ETriggerEvent::Started, this, &AMorganPlayerController::SetPause);
+		Input->BindAction(InputDataConfig->OpenImprovementsMenu, ETriggerEvent::Started, this, &AMorganPlayerController::OpenImprovementsMenu);
 	}
 }
 
@@ -161,4 +162,12 @@ void AMorganPlayerController::SetPause()
 	if (!GetWorld() || !GetWorld()->GetAuthGameMode()) return;
 
 	GetWorld()->GetAuthGameMode()->SetPause(this);
+}
+
+void AMorganPlayerController::OpenImprovementsMenu()
+{
+	AMorganHUD* MorganHUD = Cast<AMorganHUD>(GetHUD());
+	if(!MorganHUD) return;
+
+	MorganHUD->OpenImprovementsMenu();
 }

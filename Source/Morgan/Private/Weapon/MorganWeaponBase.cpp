@@ -22,10 +22,6 @@ void AMorganWeaponBase::Attack()
 void AMorganWeaponBase::SetLevel(const int32 Level)
 {
 	DamageAmount = InitialDamageAmount + IncreasedDamageAmount * (Level - 1);
-	UE_LOG(LogTemp, Warning, TEXT("Owner: %s, Level: %i, Damage: %f"),
-		*GetOwner()->GetClass()->GetName(),
-		Level,
-		DamageAmount);
 }
 
 void AMorganWeaponBase::BeginPlay()

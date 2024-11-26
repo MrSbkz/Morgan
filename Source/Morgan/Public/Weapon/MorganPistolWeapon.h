@@ -19,7 +19,6 @@ public:
 	virtual void Attack() override;
 	virtual void Reload() override;
 	int32 GetBulletsAmount() const { return BulletsAmount; }
-	virtual void SetLevel(int32 Level) override;
 
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	float TraceMaxDistance = 1500.0f;

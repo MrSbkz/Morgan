@@ -2,6 +2,7 @@
 
 #include "Components/MorganHealthComponent.h"
 #include "AI/Character/MorganKnightSkeletonCharacter.h"
+#include "Player/MorganPlayerState.h"
 
 void UMorganHealthComponent::SetHealthLevel(const int32 Level)
 {
@@ -15,6 +16,17 @@ void UMorganHealthComponent::SetHealthLevel(const int32 Level)
 		*GetOwner()->GetClass()->GetName(),
 		Level,
 		Health);
+}
+
+int32 UMorganHealthComponent::GetHealthImprovementCost() const
+{
+	const APawn* Pawn = Cast<APawn>(GetOwner());
+	if(!Pawn) return 0;
+
+	const AMorganPlayerState* PlayerState = Cast<AMorganPlayerState>(Pawn->GetPlayerState());
+	if(!PlayerState) return 0;
+
+	return PlayerState->GetHealthLevel() * ImprovementCostByLevel;
 }
 
 void UMorganHealthComponent::BeginPlay()

@@ -17,7 +17,9 @@ public:
 	void Attack() const;
 	void Reload() const;
 	void DestroyWeapon() const;
-	void SetWeaponLevel(int32 Level) const;
+	void SetWeaponLevel(int32 Level);
+	float GetWeaponDamageAmount() const;
+	int32 GetWeaponImprovementCost() const;
 	AMorganWeaponBase* GetWeapon() const { return Weapon; }
 
 protected:
@@ -28,6 +30,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	TSubclassOf<AMorganWeaponBase> WeaponClass;
+
+	UPROPERTY(EditDefaultsOnly, Category="Weapon")
+	int32 ImprovementCostByLevel = 100;
 
 private:
 	void SpawnWeapon();

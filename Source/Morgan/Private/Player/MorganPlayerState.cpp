@@ -25,7 +25,7 @@ void AMorganPlayerState::IncreaseWeaponLevel()
 {
 	if(!GetPawn()) return;
 	
-	if(const UMorganWeaponComponent* WeaponComponent = GetPawn()->FindComponentByClass<UMorganWeaponComponent>())
+	if(UMorganWeaponComponent* WeaponComponent = GetPawn()->FindComponentByClass<UMorganWeaponComponent>())
 	{
 		++WeaponLevel;
 		WeaponComponent->SetWeaponLevel(WeaponLevel);

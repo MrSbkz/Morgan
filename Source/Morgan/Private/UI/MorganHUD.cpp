@@ -58,6 +58,28 @@ void AMorganHUD::UpdateRespawnTimer(const int32 RespawnTime) const
 	}
 }
 
+void AMorganHUD::OpenImprovementsMenu()
+{
+	APlayerController* PlayerController = GetOwningPlayerController();
+	if(!PlayerController) return;
+	
+	if(IsImprovementsMenuOpened)
+	{
+		ImprovementsWidget->SetVisibility(ESlateVisibility::Hidden);
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->SetShowMouseCursor(false);
+	}
+	else
+	{
+		BuildingWidget->SetVisibility(ESlateVisibility::Hidden);
+		ImprovementsWidget->SetVisibility(ESlateVisibility::Visible);
+		PlayerController->SetInputMode(FInputModeGameAndUI());
+		PlayerController->SetShowMouseCursor(true);		
+	}
+
+	IsImprovementsMenuOpened = !IsImprovementsMenuOpened;
+}
+
 void AMorganHUD::BeginPlay()
 {
 	Super::BeginPlay();
@@ -84,6 +106,7 @@ void AMorganHUD::InitWidgets()
 	SpectatorWidget = InitOneWidget(SpectatorWidgetClass, ESlateVisibility::Hidden);
 	WeaponDataWidget = InitOneWidget(WeaponDataWidgetClass, ESlateVisibility::HitTestInvisible);
 	PauseWidget = InitOneWidget(PauseWidgetClass, ESlateVisibility::Hidden);
+	ImprovementsWidget = InitOneWidget(ImprovementsWidgetClass, ESlateVisibility::Hidden);
 }
 
 UUserWidget* AMorganHUD::InitOneWidget(

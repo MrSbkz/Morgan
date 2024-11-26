@@ -28,13 +28,6 @@ void AMorganPistolWeapon::Reload()
 	}
 }
 
-void AMorganPistolWeapon::SetLevel(int32 Level)
-{
-	Super::SetLevel(Level);
-
-	++BulletsAmount;
-}
-
 void AMorganPistolWeapon::BeginPlay()
 {
 	Super::BeginPlay();

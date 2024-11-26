@@ -2,6 +2,7 @@
 
 #include "Components/MorganWeaponComponent.h"
 #include "GameFramework/Character.h"
+#include "Player/MorganPlayerState.h"
 #include "Weapon/MorganWeaponBase.h"
 
 void UMorganWeaponComponent::Attack() const
@@ -24,12 +25,33 @@ void UMorganWeaponComponent::DestroyWeapon() const
 	}
 }
 
-void UMorganWeaponComponent::SetWeaponLevel(const int32 Level) const
+void UMorganWeaponComponent::SetWeaponLevel(const int32 Level)
 {
 	if (Weapon)
 	{
 		Weapon->SetLevel(Level);
 	}
+}
+
+float UMorganWeaponComponent::GetWeaponDamageAmount() const
+{
+	if (Weapon)
+	{
+		return Weapon->GetDamageAmount();
+	}
+
+	return 30.0f;
+}
+
+int32 UMorganWeaponComponent::GetWeaponImprovementCost() const
+{
+	const APawn* Pawn = Cast<APawn>(GetOwner());
+	if(!Pawn) return 0;
+
+	const AMorganPlayerState* PlayerState = Cast<AMorganPlayerState>(Pawn->GetPlayerState());
+	if(!PlayerState) return 0;
+
+	return PlayerState->GetWeaponLevel() * ImprovementCostByLevel;
 }
 
 void UMorganWeaponComponent::BeginPlay()
