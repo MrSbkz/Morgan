@@ -57,7 +57,7 @@ void AMorganPlayerController::SetupInputComponent()
 			this,
 			&AMorganPlayerController::OpenBuildingMenu
 		);
-		Input->BindAction(InputDataConfig->Pause, ETriggerEvent::Started, this, &AMorganPlayerController::SetPause);
+		Input->BindAction(InputDataConfig->Pause, ETriggerEvent::Started, this, &AMorganPlayerController::SetGamePause);
 		Input->BindAction(InputDataConfig->OpenImprovementsMenu, ETriggerEvent::Started, this, &AMorganPlayerController::OpenImprovementsMenu);
 	}
 }
@@ -74,9 +74,9 @@ void AMorganPlayerController::OnPossess(APawn* InPawn)
 		{
 			if (WeaponComponent)
 			{
-				MorganHUD->BindToWeaponComponent(WeaponComponent);
 				WeaponComponent->SpawnWeapon();
 				WeaponComponent->SetWeaponLevel(MorganPlayerState->GetWeaponLevel());
+				MorganHUD->BindToWeaponComponent(WeaponComponent);
 			}
 
 			if (HealthComponent)
@@ -171,7 +171,7 @@ void AMorganPlayerController::OpenBuildingMenu()
 	}
 }
 
-void AMorganPlayerController::SetPause()
+void AMorganPlayerController::SetGamePause()
 {
 	if (!GetWorld() || !GetWorld()->GetAuthGameMode()) return;
 

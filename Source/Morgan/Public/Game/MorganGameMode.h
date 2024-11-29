@@ -21,6 +21,7 @@ public:
 	void RespawnRequest(const int32 RespawnTime);
 	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate) override;
 	virtual bool ClearPause() override;
+	void EnemyKilled();
 
 	FOnGameStateChangedSignature OnGameStateChanged;
 
@@ -36,16 +37,26 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="AI")
 	TSubclassOf<ACharacter> EnemyCharacterClass;
 
+	UPROPERTY(EditDefaultsOnly, Category="Wave")
+	TArray<FEnemiesWave> EnemiesWaves;
+
 private:
 	void RespawnTimerUpdate();
 	void RespawnPlayer(AController* Controller);
-	void SpawnEnemies();
+	void SpawnEnemies(FWaveEnemiesType EnemiesType);
 	AActor* GetEnemyStart();
 	static void SetEnemy(ACharacter* EnemyCharacter, const int32 EnemyLevel, const bool HasLoot);
+	void StartWave();
+	void NextWaveTimerUpdate();
 	
 	FTimerHandle RespawnTimerHandle;
+	FTimerHandle NextWaveTimerHandle;
 	int32 RespawnCountDown = 0;
+	int32 NextWaveCountDown = 5;
+	int32 CurrentWave = 1;
 
 	UPROPERTY()
 	TArray<AActor*> EnemyPlayerStarts;
+
+	int32 EnemiesLeft = 0;
 };

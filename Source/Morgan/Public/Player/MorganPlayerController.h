@@ -36,6 +36,6 @@ private:
 	void Attack();
 	void Reload();
 	void OpenBuildingMenu();
-	void SetPause();
+	void SetGamePause();
 	void OpenImprovementsMenu();
 };
