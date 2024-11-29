@@ -23,7 +23,6 @@ public:
 	AMorganPlayerCharacter();
 
 protected:
-	virtual void BeginPlay() override;
 	virtual void OnDeath() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")

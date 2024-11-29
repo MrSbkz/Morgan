@@ -30,6 +30,8 @@ void AMorganKnightSkeletonCharacter::SetLevel(const int32 InLevel)
 	
 	GetMesh()->SetSkeletalMesh(Meshes.Contains(Level) ? Meshes[Level].LoadSynchronous() : nullptr);
 
+	WeaponComponent->SpawnWeapon();
+
 	WeaponComponent->SetWeaponLevel(Level);
 	HealthComponent->SetHealthLevel(Level);
 }
