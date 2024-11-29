@@ -22,15 +22,31 @@ AMorganKnightSkeletonCharacter::AMorganKnightSkeletonCharacter()
 	}
 }
 
+void AMorganKnightSkeletonCharacter::SetLevel(const int32 InLevel)
+{
+	checkf(Meshes.Num() > 0, TEXT("Meshes map is empty"));
+
+	Level = InLevel;
+	
+	GetMesh()->SetSkeletalMesh(Meshes.Contains(Level) ? Meshes[Level].LoadSynchronous() : nullptr);
+
+	WeaponComponent->SpawnWeapon();
+
+	WeaponComponent->SetWeaponLevel(Level);
+	HealthComponent->SetHealthLevel(Level);
+}
+
+void AMorganKnightSkeletonCharacter::SetHasLoot(const bool InHasLoot)
+{
+	HasLoot = InHasLoot;
+}
+
 void AMorganKnightSkeletonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	HealthWidgetComponent->SetVisibility(false);
 	HealthComponent->OnHealthChanged.AddUObject(this, &AMorganKnightSkeletonCharacter::OnHealthChanged);
-
-	WeaponComponent->SetWeaponLevel(Level);
-	HealthComponent->SetHealthLevel(Level);
 }
 
 void AMorganKnightSkeletonCharacter::OnDeath()
@@ -76,5 +92,6 @@ void AMorganKnightSkeletonCharacter::SpawnLoot() const
 	CharacterLocation.Z = +50.0f;
 	FTransform Transform;
 	Transform.SetLocation(CharacterLocation);
-	GetWorld()->SpawnActor<AMorganChestPickUp>(LootClass, Transform);
+	AMorganChestPickUp* Chest = GetWorld()->SpawnActor<AMorganChestPickUp>(LootClass, Transform);
+	Chest->SetGoldAmount(Level);
 }

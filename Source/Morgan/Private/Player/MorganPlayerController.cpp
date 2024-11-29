@@ -75,6 +75,7 @@ void AMorganPlayerController::OnPossess(APawn* InPawn)
 			if (WeaponComponent)
 			{
 				MorganHUD->BindToWeaponComponent(WeaponComponent);
+				WeaponComponent->SpawnWeapon();
 				WeaponComponent->SetWeaponLevel(MorganPlayerState->GetWeaponLevel());
 			}
 
@@ -85,6 +86,19 @@ void AMorganPlayerController::OnPossess(APawn* InPawn)
 			}
 		}
 	}
+}
+
+void AMorganPlayerController::OnUnPossess()
+{
+	if (GetPawn())
+	{
+		if (const UMorganWeaponComponent* WeaponComponent = GetPawn()->FindComponentByClass<UMorganWeaponComponent>())
+		{
+			WeaponComponent->DestroyWeapon();
+		}
+	}
+
+	Super::OnUnPossess();
 }
 
 void AMorganPlayerController::OnGameStateChanged(EGameState GameState)
@@ -167,7 +181,7 @@ void AMorganPlayerController::SetPause()
 void AMorganPlayerController::OpenImprovementsMenu()
 {
 	AMorganHUD* MorganHUD = Cast<AMorganHUD>(GetHUD());
-	if(!MorganHUD) return;
+	if (!MorganHUD) return;
 
 	MorganHUD->OpenImprovementsMenu();
 }

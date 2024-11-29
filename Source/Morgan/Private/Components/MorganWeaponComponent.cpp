@@ -54,13 +54,6 @@ int32 UMorganWeaponComponent::GetWeaponImprovementCost() const
 	return PlayerState->GetWeaponLevel() * ImprovementCostByLevel;
 }
 
-void UMorganWeaponComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	SpawnWeapon();
-}
-
 void UMorganWeaponComponent::SpawnWeapon()
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());

@@ -21,10 +21,9 @@ public:
 	float GetWeaponDamageAmount() const;
 	int32 GetWeaponImprovementCost() const;
 	AMorganWeaponBase* GetWeapon() const { return Weapon; }
+	void SpawnWeapon();
 
 protected:
-	virtual void BeginPlay() override;
-
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	FName WeaponEquipSocketName = "WeaponPoint";
 
@@ -35,7 +34,6 @@ protected:
 	int32 ImprovementCostByLevel = 100;
 
 private:
-	void SpawnWeapon();
 	void AttachWeaponToSocket(USceneComponent* SceneComponent) const;
 
 	UPROPERTY()
