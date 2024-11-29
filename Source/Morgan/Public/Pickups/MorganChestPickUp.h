@@ -16,6 +16,8 @@ class MORGAN_API AMorganChestPickUp : public AActor
 public:
 	AMorganChestPickUp();
 
+	void SetGoldAmount(const int32 EnemyLevel) { GoldAmount = GoldAmountPerLevel * EnemyLevel; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -24,9 +26,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Pickups")
 	USphereComponent* Collision;
 
-	UPROPERTY(EditDefaultsOnly, Category="Pickups")
-	int32 GoldAmount;
+	UPROPERTY(EditAnywhere, Category="Pickups")
+	int32 GoldAmountPerLevel = 100;
 
 	UPROPERTY(EditDefaultsOnly, Category="Pickups")
 	float LifeTime = 10.0f;
+
+private:
+	int32 GoldAmount = 1000;
 };

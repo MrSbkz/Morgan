@@ -28,20 +28,20 @@ void AMorganPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		if (const AMorganHUD* MorganHUD = Cast<AMorganHUD>(PlayerController->GetHUD()))
-		{
-			MorganHUD->BindToHealthComponent(HealthComponent);
-			MorganHUD->BindToWeaponComponent(WeaponComponent);
-		}
-	}
-
-	if (const AMorganPlayerState* MorganPlayerState = Cast<AMorganPlayerState>(GetPlayerState()))
-	{
-		WeaponComponent->SetWeaponLevel(MorganPlayerState->GetWeaponLevel());
-		HealthComponent->SetHealthLevel(MorganPlayerState->GetHealthLevel());
-	}
+	// if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	// {
+	// 	if (const AMorganHUD* MorganHUD = Cast<AMorganHUD>(PlayerController->GetHUD()))
+	// 	{
+	// 		MorganHUD->BindToHealthComponent(HealthComponent);
+	// 		MorganHUD->BindToWeaponComponent(WeaponComponent);
+	// 	}
+	// }
+	//
+	// if (const AMorganPlayerState* MorganPlayerState = Cast<AMorganPlayerState>(GetPlayerState()))
+	// {
+	// 	WeaponComponent->SetWeaponLevel(MorganPlayerState->GetWeaponLevel());
+	// 	HealthComponent->SetHealthLevel(MorganPlayerState->GetHealthLevel());
+	// }
 }
 
 void AMorganPlayerCharacter::OnDeath()

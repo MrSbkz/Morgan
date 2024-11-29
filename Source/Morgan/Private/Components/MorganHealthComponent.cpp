@@ -6,7 +6,7 @@
 
 void UMorganHealthComponent::SetHealthLevel(const int32 Level)
 {
-	const float HealthToAdd = InitialMaxHealth + IncreasedHealth * (Level - 1) - MaxHealth;
+	const float HealthToAdd = InitialMaxHealth + IncreasedHealth * (Level - 1) - InitialMaxHealth;
 	
 	MaxHealth += HealthToAdd;
 	Health += HealthToAdd;
