@@ -60,7 +60,7 @@ void AMorganKnightSkeletonCharacter::OnDeath()
 
 	if(AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode()))
 	{
-		GameMode->EnemyKilled();
+		GameMode->EnemyDied();
 	}
 }
 
