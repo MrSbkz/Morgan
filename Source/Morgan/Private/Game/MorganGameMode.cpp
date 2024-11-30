@@ -33,7 +33,7 @@ void AMorganGameMode::StartPlay()
 
 	RespawnPlayer(PlayerController);
 
-	SpawnEnemies();
+	StartWave();
 }
 
 void AMorganGameMode::RespawnRequest(const int32 RespawnTime)
@@ -71,6 +71,21 @@ bool AMorganGameMode::ClearPause()
 	return IsUnpaused;
 }
 
+void AMorganGameMode::EnemyKilled()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Enemies Left: %i"), EnemiesLeft - 1);
+	if (--EnemiesLeft == 0)
+	{
+		++CurrentWave;
+		GetWorld()->GetTimerManager().SetTimer(
+			NextWaveTimerHandle,
+			this,
+			&AMorganGameMode::NextWaveTimerUpdate,
+			1.0f,
+			true);
+	}
+}
+
 void AMorganGameMode::RespawnTimerUpdate()
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -99,16 +114,15 @@ void AMorganGameMode::RespawnPlayer(AController* Controller)
 	RestartPlayer(Controller);
 }
 
-void AMorganGameMode::SpawnEnemies()
+void AMorganGameMode::SpawnEnemies(const FWaveEnemiesType EnemiesType)
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMorganEnemyPlayerStart::StaticClass(), EnemyPlayerStarts);
 
 	if (!GetWorld()) return;
 
-	constexpr int32 EnemiesAmount = 8;
-	int32 EnemiesWithLootAmount = 3;
+	int32 EnemiesWithLootAmount = EnemiesType.EnemiesHasLootAmount;
 
-	for (int32 i = 0; i < EnemiesAmount - 1; ++i)
+	for (int32 i = 0; i < EnemiesType.EnemiesAmount; ++i)
 	{
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -119,8 +133,7 @@ void AMorganGameMode::SpawnEnemies()
 		ACharacter* EnemyCharacter = GetWorld()->SpawnActor<ACharacter>(EnemyCharacterClass, StartSpot->GetTransform(), SpawnInfo);
 		if (!EnemyCharacter) continue;
 
-		const int32 RandomEnemyLevel = FMath::RandRange(1, 3);
-		SetEnemy(EnemyCharacter, RandomEnemyLevel, EnemiesWithLootAmount > 0);
+		SetEnemy(EnemyCharacter, EnemiesType.EnemiesLevel, EnemiesWithLootAmount > 0);
 		--EnemiesWithLootAmount;
 	}
 }
@@ -145,5 +158,29 @@ void AMorganGameMode::SetEnemy(ACharacter* EnemyCharacter, const int32 EnemyLeve
 	{
 		KnightSkeletonCharacter->SetLevel(EnemyLevel);
 		KnightSkeletonCharacter->SetHasLoot(HasLoot);
+	}
+}
+
+void AMorganGameMode::StartWave()
+{
+	if (EnemiesWaves.Num() < CurrentWave) return;
+	
+	UE_LOG(LogTemp, Display, TEXT("CurrentWave: %i/%i"), CurrentWave, EnemiesWaves.Num());
+
+	for (const auto EnemiesType : EnemiesWaves[CurrentWave - 1].EnemyTypes)
+	{
+		EnemiesLeft += EnemiesType.EnemiesAmount;
+		SpawnEnemies(EnemiesType);
+	}
+}
+
+void AMorganGameMode::NextWaveTimerUpdate()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Next wave in: %i"), NextWaveCountDown - 1);
+	if (--NextWaveCountDown == 0)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(NextWaveTimerHandle);
+		NextWaveCountDown = 5;
+		StartWave();
 	}
 }

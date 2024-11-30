@@ -33,3 +33,27 @@ enum class EGameState : uint8
 	Pause,
 	InProgress
 };
+
+USTRUCT()
+struct FWaveEnemiesType
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, Category="Wave", meta=(ClampMin="1", ClampMax="3"))
+	int32 EnemiesLevel = 1;
+
+	UPROPERTY(EditDefaultsOnly, Category="Wave", meta=(ClampMin="1", ClampMax="10"))
+	int32 EnemiesAmount = 1;
+
+	UPROPERTY(EditDefaultsOnly, Category="Wave", meta=(ClampMin="0", ClampMax="10"))
+	int32 EnemiesHasLootAmount = 0;
+};
+
+USTRUCT()
+struct FEnemiesWave
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, Category="Wave")
+	TArray<FWaveEnemiesType> EnemyTypes;
+};

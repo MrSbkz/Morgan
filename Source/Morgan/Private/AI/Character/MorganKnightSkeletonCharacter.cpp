@@ -4,6 +4,7 @@
 #include "Components/MorganHealthComponent.h"
 #include "Components/MorganWeaponComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Game/MorganGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Pickups/MorganChestPickUp.h"
 #include "UI/MorganHealthBarWidget.h"
@@ -56,6 +57,11 @@ void AMorganKnightSkeletonCharacter::OnDeath()
 	GetMesh()->SetSimulatePhysics(true);
 	OnWidgetLifeTimeFinished();
 	SpawnLoot();
+
+	if(AMorganGameMode* GameMode = Cast<AMorganGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		GameMode->EnemyKilled();
+	}
 }
 
 void AMorganKnightSkeletonCharacter::OnHealthChanged(const float HealthPercent)
