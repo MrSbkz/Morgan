@@ -33,6 +33,7 @@ void AMorganGameMode::StartPlay()
 
 	RespawnPlayer(PlayerController);
 
+	NextWaveCountDown = NextWaveTime;
 	StartWave();
 }
 
@@ -71,7 +72,7 @@ bool AMorganGameMode::ClearPause()
 	return IsUnpaused;
 }
 
-void AMorganGameMode::EnemyKilled()
+void AMorganGameMode::EnemyDied()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Enemies Left: %i"), EnemiesLeft - 1);
 	if (--EnemiesLeft == 0)
@@ -166,6 +167,7 @@ void AMorganGameMode::StartWave()
 	if (EnemiesWaves.Num() < CurrentWave) return;
 	
 	UE_LOG(LogTemp, Display, TEXT("CurrentWave: %i/%i"), CurrentWave, EnemiesWaves.Num());
+	OnCurrentWaveUpdated.Broadcast(CurrentWave);
 
 	for (const auto EnemiesType : EnemiesWaves[CurrentWave - 1].EnemyTypes)
 	{
@@ -176,11 +178,13 @@ void AMorganGameMode::StartWave()
 
 void AMorganGameMode::NextWaveTimerUpdate()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Next wave in: %i"), NextWaveCountDown - 1);
-	if (--NextWaveCountDown == 0)
+	--NextWaveCountDown;
+	UE_LOG(LogTemp, Warning, TEXT("Next wave in: %i"), NextWaveCountDown);
+	OnNextWaveTimeUpdated.Broadcast(NextWaveCountDown);
+	if (NextWaveCountDown == 0)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(NextWaveTimerHandle);
-		NextWaveCountDown = 5;
+		NextWaveCountDown = NextWaveTime;
 		StartWave();
 	}
 }

@@ -9,6 +9,7 @@
 
 class AAIController;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnGameStateChangedSignature, EGameState);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnWaveDataUpdatedSignature, int32);
 
 UCLASS()
 class MORGAN_API AMorganGameMode : public AGameModeBase
@@ -21,9 +22,11 @@ public:
 	void RespawnRequest(const int32 RespawnTime);
 	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate) override;
 	virtual bool ClearPause() override;
-	void EnemyKilled();
+	void EnemyDied();
 
 	FOnGameStateChangedSignature OnGameStateChanged;
+	FOnWaveDataUpdatedSignature OnNextWaveTimeUpdated;
+	FOnWaveDataUpdatedSignature OnCurrentWaveUpdated;
 
 	TMap<EBuildingItemType, FBuildingItemData> GetBuildingItems() { return BuildingItems; }
 
@@ -40,6 +43,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Wave")
 	TArray<FEnemiesWave> EnemiesWaves;
 
+	UPROPERTY(EditDefaultsOnly, Category="Wave")
+	int32 NextWaveTime = 5;
+
 private:
 	void RespawnTimerUpdate();
 	void RespawnPlayer(AController* Controller);
@@ -52,7 +58,7 @@ private:
 	FTimerHandle RespawnTimerHandle;
 	FTimerHandle NextWaveTimerHandle;
 	int32 RespawnCountDown = 0;
-	int32 NextWaveCountDown = 5;
+	int32 NextWaveCountDown = 0;
 	int32 CurrentWave = 1;
 
 	UPROPERTY()
